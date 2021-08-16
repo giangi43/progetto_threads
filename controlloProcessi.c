@@ -32,10 +32,7 @@ void leggi (int pipein, struct proprietaOggetto *valore_letto){
     
     printStringIntDebugLog(DEBUGGING, "sta provando a leggere %d\n",&debugIndex);
 
-    //pthread_mutex_lock(&lock);
-    //read(pipein,valore_letto,sizeof(valore_letto));
     *valore_letto = pop(codaProprieta);
-    //pthread_mutex_unlock(&lock);
     
     printStringCharDebugLog(DEBUGGING,"%c: ",&valore_letto->segnaposto[0]);
     printStringIntDebugLog(DEBUGGING, "%d, è stato letto\n",&valore_letto->istanza);
@@ -110,7 +107,6 @@ void killThemAll(struct proprietaOggetto personaggio[], int numeroPersonaggi){
 void killIt(struct proprietaOggetto *personaggio){
     //printProprietaOggettoDebugLog(personaggio->pid==0&&personaggio->oldX!=-1, personaggio);
     //printStringIntDebugLog(personaggio->pid==0&&personaggio->oldX!=-1," !!!!!!!!\nkillit pid = 0 per istanza = %d \n!!!!!!!!!\n", &(personaggio->istanza));
-    pthread_mutex_lock(&lock);
 
     if (personaggio->tid!=0){
         deletePropietaOggetto(personaggio);
@@ -118,14 +114,13 @@ void killIt(struct proprietaOggetto *personaggio){
         printStringIntDebugLog(DEBUGGING,"killit in esecuzione %d\n",&debugIndex);
         //fflush(NULL);
         //pthread_join(personaggio->tid,NULL);
-        personaggio->flag=LOST;
+        personaggio->flag='k';
         printStringIntDebugLog(true,"killit eseguita %d\n",&debugIndex);
         
         personaggio->tid = 0;  
         deletePropietaOggetto(personaggio); 
         aliveProcesses--;
     }  
-    pthread_mutex_unlock(&lock);    
 }
 
 
@@ -182,6 +177,7 @@ int checkContacts(struct proprietaOggetto *personaggioA, struct proprietaOggetto
             killIt(personaggioA);
         }
         
+        pthread_mutex_unlock(&lifes);
         pthread_mutex_lock(&lifes);
         
         arrayPersonaggiB[index].vite--;

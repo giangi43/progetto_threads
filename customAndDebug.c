@@ -17,7 +17,7 @@ void createDebugLog(bool isDebugging){
         fptr = fopen("debugLog.txt","w");
         debugIndex = 0;
         if(fptr == NULL){
-            printf("Error loading debug");   
+            //printf("Error loading debug");   
             exit(1);             
         }
         fclose(fptr);
@@ -33,7 +33,7 @@ void printStringIntDebugLog(bool isDebugging, char* string, int *something){
         pthread_mutex_lock(&debug);
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
-            printf("Error in printStringDebugLog");   
+            //printf("Error in printStringDebugLog");   
             exit(1);             
         }
         fprintf(fptr,string, *something);
@@ -47,7 +47,7 @@ void printStringCharDebugLog(bool isDebugging, char* string,char *something){
         pthread_mutex_lock(&debug);
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
-            printf("Error in printStringDebugLog");   
+            //printf("Error in printStringDebugLog");   
             exit(1);             
         }
         fprintf(fptr,string, *something);
@@ -62,7 +62,7 @@ void printStringStringDebugLog(bool isDebugging, char* string,char something[]){
         pthread_mutex_lock(&debug);
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
-            printf("Error in printStringDebugLog");   
+            //printf("Error in printStringDebugLog");   
             exit(1);             
         }
         fprintf(fptr,string, something);
@@ -77,7 +77,7 @@ void printProprietaOggettoDebugLog(bool isDebugging,struct proprietaOggetto *per
         pthread_mutex_lock(&debug);
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
-            printf("Error in printStringDebugLog");   
+            //printf("Error in printStringDebugLog");   
             exit(1);             
         }
         fprintf(fptr,"{\n\t");

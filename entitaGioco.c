@@ -55,7 +55,7 @@ void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonom
     printStringIntDebugLog(DEBUGGING,"personaggioF ha scritto %d\n", &proprieta_personaggio->istanza);
     fflush(NULL);  
 
-    while(proprieta_personaggio->flag!='l') {
+    while(proprieta_personaggio->flag!='k') {
         counter++;
         if(counter==100){
             counter=0;
@@ -304,10 +304,10 @@ void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostam
     int counter =0;
     printStringIntDebugLog(DEBUGGING2,"-> proiettileF %d \n", &debugIndex);
     scrivi(proprieta_proiettile);
-    while(proprieta_proiettile->flag!=LOST) {
+    while(proprieta_proiettile->flag!='k') {
         counter++;
 
-        for (int i = 0; i < 10000; i++)
+        for (int i = 0; i < 1000000; i++)
         {
             {int i = 5+5;}
         }
@@ -325,8 +325,8 @@ void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostam
        if(proprieta_proiettile->y>=getYfieldSize()||proprieta_proiettile->y<0){
             printStringCharDebugLog(DEBUGGING," !!!!!!!!\nERRORE il proiettile %c", &proprieta_proiettile->segnaposto[0]);
             printStringIntDebugLog(DEBUGGING," con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &proprieta_proiettile->istanza);
-            proprieta_proiettile->flag=LOST;
-            scrivi(proprieta_proiettile);
+            //proprieta_proiettile->flag=LOST;
+            break;
         }
         
         // pthread_mutex_lock(&lifes);
@@ -337,6 +337,9 @@ void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostam
         // pthread_mutex_unlock(&lifes);
         
         scrivi(proprieta_proiettile);
+        //stampo
+        // attron(COLOR_PAIR(2));
+        printPropietaOggetto(proprieta_proiettile);
     }
 }
 

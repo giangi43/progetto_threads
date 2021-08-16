@@ -47,7 +47,6 @@ int main(){
     createDebugLog(true);
     printDebugLog(true);
     printDebugLog(DEBUGGING);
-    printf("miao");
     
     initscr();
     
@@ -150,7 +149,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
     attrset(A_NORMAL);
     attron(A_BOLD);
     printLifesLeft(1,0,naveSpaziale[0].vite);
-    printFPS(1, getXfieldSize()-7, &FPScounter);
+    //printFPS(1, getXfieldSize()-7, &FPScounter);
     printEnemiesLeft(10, 0, numeroNemici);
     curs_set(0);    
     refresh();
@@ -285,8 +284,8 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
                     controlloAlieno(NULL,&alieno[index], alienoCattivo);
                 }
                 //stampo
-                attron(COLOR_PAIR(2));
-                printPropietaOggetto(&proiettile[valore_letto.istanza]);
+                // attron(COLOR_PAIR(2));
+                // printPropietaOggetto(&proiettile[valore_letto.istanza]);
             }
         }
         
@@ -306,8 +305,8 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
                     printStringIntDebugLog(DEBUGGING,"nave controllata drop %d\n",&valore_letto.istanza);
                 }
                 //stampo
-                attron(COLOR_PAIR(3));
-                printPropietaOggetto(&dropBomb[valore_letto.istanza]);
+                // attron(COLOR_PAIR(3));
+                // printPropietaOggetto(&dropBomb[valore_letto.istanza]);
             //}
         }
         

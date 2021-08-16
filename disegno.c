@@ -1,4 +1,6 @@
 #include "header.h"
+pthread_mutex_t printMutex;
+
 
 /*
     legge e setta le dimensioni del terminale.
@@ -69,7 +71,9 @@ void resetField(int startingX, int stratingY, int endingX, int endingY){
     in cordinate a scelta
 */
 void printLifesLeft(int startingX, int startingY, int lifesLeft){
+    pthread_mutex_lock(&printMutex);
     mvprintw(startingY, startingX, "vite:%d/", lifesLeft);
+    pthread_mutex_unlock(&printMutex);
 }
 
 /*
@@ -77,7 +81,9 @@ void printLifesLeft(int startingX, int startingY, int lifesLeft){
     in cordinate a scelta
 */
 void printEnemiesLeft(int startingX, int startingY, int numeroNemici){
-    mvprintw(startingY, startingX, "nemici:%d//", numeroNemici); 
+    pthread_mutex_lock(&printMutex);
+    mvprintw(startingY, startingX, "nemici:%d//", numeroNemici);
+    pthread_mutex_unlock(&printMutex); 
 }
 
 /*
@@ -91,7 +97,9 @@ void printFPS(int startingX, int startingY, int *FPScounter){
     int trigger = 1;
 
     if (msec > trigger){
+        pthread_mutex_lock(&printMutex);
         mvprintw(startingY, startingX, "fps:%d//", *FPScounter);
+        pthread_mutex_unlock(&printMutex);
         *FPScounter=0;
         clockStart = clock();
     } 
@@ -103,8 +111,10 @@ void printFPS(int startingX, int startingY, int *FPScounter){
 /*
     stampa quanti processi o thread sono attivi in un dato momento
 */
-void printNAliveProcesses(int startingX, int startingY, int *nProcesses){    
+void printNAliveProcesses(int startingX, int startingY, int *nProcesses){ 
+    pthread_mutex_lock(&printMutex);   
     mvprintw(startingY, startingX, "processes:%d//", *nProcesses);
+    pthread_mutex_unlock(&printMutex);
 }
 
 /*
@@ -112,8 +122,8 @@ void printNAliveProcesses(int startingX, int startingY, int *nProcesses){
 */
 void printPropietaOggetto(struct proprietaOggetto *oggetto){    
     //printProprietaOggettoDebugLog( oggetto->segnaposto[0] == '*',oggetto);    
-    
-    if (/*oggetto->pid!=0 ||*/ oggetto->tid!=0)
+    pthread_mutex_lock(&printMutex);
+    if ( oggetto->tid!=0)
     {
         if (oggetto->oldX != -1 &&oggetto->oldY!=-1){
             deletePropietaOggetto(oggetto);
@@ -122,36 +132,10 @@ void printPropietaOggetto(struct proprietaOggetto *oggetto){
     }   
     
     attrset(A_NORMAL);
+    pthread_mutex_unlock(&printMutex);
 }
 
-/*
-    stampa un array di personaggi nella loro posizione
-*/
-/*
-void printArrayPropietaOggetto(struct proprietaOggetto oggetto[], int numeroOggetti){    
-    
-    for (int i = 0; i < numeroOggetti; i++)
-    {
-        if(/*oggetto[i].pid!=0 || oggetto[i].tid!=0){
-            mvprintw(oggetto[i].y, oggetto[i].x, oggetto[i].segnaposto);
-        }
-    }    
-    attrset(A_NORMAL);
-}*/
 
-
-/*
-    cancella un personaggio dall' ultima sua posizione
-*/
-/*void deletePropietaOggetto(struct proprietaOggetto *oggetto){
-    if(oggetto->pid==0){
-        mvaddnstr(oggetto->y, oggetto->x, EMPTY_STRING, oggetto->lunghezzaSegnaposto);
-        //printProprietaOggettoDebugLog( DEBUGGING,oggetto);
-    }
-    else{
-        mvaddnstr(oggetto->oldY, oggetto->oldX, EMPTY_STRING,oggetto->lunghezzaSegnaposto);
-    }
-}*/
 
 void deletePropietaOggetto(struct proprietaOggetto *oggetto){
     if(/*oggetto->pid==0 &&*/ oggetto->tid==0 ){

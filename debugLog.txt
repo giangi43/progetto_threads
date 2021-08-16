@@ -23,4 +23,5 @@ killit eseguita 21
 killit eseguita 22
 killit eseguita 23
 killit eseguita 24
-controllo ->25; 
+killit eseguita 25
+killit eseguita 26
