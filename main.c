@@ -1,7 +1,7 @@
 #include "header.h"
 
 int main(){
-    int fileDescriptor[2] = {NULL,NULL};
+    
     //pid_t pid_alieni, pid_naveSpaziale;
     int comand;
     NUMERO_ALIENI = D_NUMERO_ALIENI;
@@ -73,10 +73,7 @@ int main(){
     }while (comand ==1);
     
     if (comand == 0){
-            
-            mutexCeck(&lock);
-            mutexCeck(&lifes);
-            mutexCeck(&debug);
+
             posizioneCoda=0;
             numeroElementiAttualiCoda=0;
             
@@ -95,7 +92,7 @@ int main(){
 }
 
 
-void controllo (int fileDescriptor[]){
+void controllo (){
 printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex);
     struct proprietaOggetto alieno[NUMERO_ALIENI];
     struct proprietaOggetto alienoCattivo[NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI];
@@ -117,14 +114,14 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
 
     setPersonaggio(&valore_letto,SEGNAPOSTO_NAVE,getXfieldSize()/2,getYfieldSize()-3,0,VITE_NAVE,0);
     inizializzaPersonaggi(&valore_letto,naveSpaziale,NUMERO_GIOCATORI);
-    creaGruppoPersonaggi(naveSpaziale, NULL, naveSpazialeF, NUMERO_GIOCATORI);
+    creaGruppoPersonaggi(naveSpaziale, naveSpazialeF, NUMERO_GIOCATORI);
     aliveProcesses+= NUMERO_GIOCATORI ;
 
     printStringIntDebugLog(DEBUGGING," creata nave %d \n", &debugIndex);
 
     setPersonaggio(&valore_letto,SEGNAPOSTO_ALIENO,1,1,0,VITE_ALIENI,0);
     inizializzaPersonaggi(&valore_letto,alieno,NUMERO_ALIENI);
-    creaGruppoPersonaggi(alieno, NULL, alienoF, NUMERO_ALIENI);
+    creaGruppoPersonaggi(alieno, alienoF, NUMERO_ALIENI);
     aliveProcesses+= NUMERO_ALIENI ;
 
     printStringIntDebugLog(DEBUGGING," creati alieni = %d \n",&debugIndex);
@@ -216,7 +213,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
             {                   
                 killIt(&dropBomb[istanzaDropBomb]);
                 setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,valore_letto.x,valore_letto.y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
-                myThreadCreate(&(dropBomb[istanzaDropBomb]),NULL,dropBombF);
+                myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
                 aliveProcesses++;
                 istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
             }
@@ -247,7 +244,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
             {                   
                 killIt(&dropBomb[istanzaDropBomb]);
                 setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,valore_letto.x,valore_letto.y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
-                myThreadCreate(&(dropBomb[istanzaDropBomb]),NULL,dropBombF);
+                myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
                 aliveProcesses++;
                 istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
             }
@@ -386,7 +383,7 @@ void controlloAlieno(int fileDescriptor[], struct proprietaOggetto *alieno, stru
             {
                 spostamentoLineare(&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI+i],false);
             }     
-            myThreadCreate(&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI+i],fileDescriptor,alienoF);
+            myThreadCreate(&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI+i],alienoF);
             //printProprietaOggettoDebugLog(DEBUGGING,&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI+i]);
 
             numeroNemici = numeroNemici+1;

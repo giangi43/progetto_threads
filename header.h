@@ -137,11 +137,11 @@ struct proprietaOggetto pop(struct proprietaOggetto coda[]);
 
 // controllo processi
 void pipeCeck(int *p); //controlla che la pipe sia stata eseguita correttamente
-void mutexCeck(pthread_mutex_t *m);
-void scrivi (int pipeout, struct proprietaOggetto *personaggio);
+//void mutexCeck(pthread_mutex_t *m);
+void scrivi (struct proprietaOggetto *personaggio);
 void leggi (int pipein, struct proprietaOggetto *valore_letto);
 pid_t myForkSwitch(struct proprietaOggetto *personaggio, int *fileDescriptor, void* (*figlio) (void*));
-pthread_t myThreadCreate(struct proprietaOggetto *personaggio, int *fileDescriptor, void* (*figlio) (void*));
+pthread_t myThreadCreate(struct proprietaOggetto *personaggio, void* (*figlio) (void*));
 void forkSwitch(pid_t *pid, int *fileDescriptor, void (*padre) (int), void (*figlio) (int)); // esegue una fork
 void forkSwitch3Way(pid_t *pid_figlio1, pid_t *pid_figlio2, int *fileDescriptor, void (*padre) (int), void (*figlio1) (int), void (*figlio2) (int)); // esegue una fork con 2 figli
 void nephewForkSwitch(pid_t *pid, int fileDescriptor, int instance, void (*nephew) (int,int));
@@ -149,7 +149,7 @@ void nNephewGenerator(pid_t pid[], int fileDescriptor, int nOfNephews, int start
 void freeTheBuffer(int pipein,struct proprietaOggetto valore_letto); // ripulisce tutto il buffer
 void killThemAll(struct proprietaOggetto personaggio[], int numeroPersonaggi);
 void killIt(struct proprietaOggetto *personaggio);
-void creaGruppoPersonaggi(struct proprietaOggetto personaggio[], int *fileDescriptor, void* (*figlio) (void*), int numeroPersonaggi);
+void creaGruppoPersonaggi(struct proprietaOggetto personaggio[], void* (*figlio) (void*), int numeroPersonaggi);
 
 // disegno
 void setActualFieldSize();
@@ -171,7 +171,7 @@ void printNAliveProcesses(int startingX, int startingY, int *nProcesses);
 void setPersonaggio (struct proprietaOggetto *proprieta_personaggio, char characterPlaceHolder[], int startingX, int startingY, pid_t pidToAssign, int viteIniziali, int istanza); // imposta i valori iniziali del personaggio
 void copyPersonaggio (struct proprietaOggetto *copiante,struct proprietaOggetto *copiato);
 void inizializzaPersonaggi(struct proprietaOggetto *daCopiare, struct proprietaOggetto Personaggio[], int numeroPersonaggi);
-void personaggioF (int pipeout, struct proprietaOggetto *pos_personaggio, int isAutonomus, char (*spostamento)(struct proprietaOggetto*,bool)); // gestisce il personaggio
+void personaggioF (struct proprietaOggetto *pos_personaggio, int isAutonomus, char (*spostamento)(struct proprietaOggetto*,bool)); // gestisce il personaggio
 void createRandomLocation(struct proprietaOggetto *el); //assegna ad una struttura proprietaOggetto una posizione casuale
 bool isSameLocation(struct proprietaOggetto *elA, struct proprietaOggetto *elB); // valuta se 2 strutture proprietaOggetto hanno la stessa posizione
 bool isSameLocationArray(struct proprietaOggetto *elA, struct proprietaOggetto elB[], int arrayLenght);
@@ -180,7 +180,7 @@ bool isOutOfBound(struct proprietaOggetto *elA);
 char passo(struct proprietaOggetto *personaggio, char c);
 void printLifesLeft(int startingX, int startingY, int lifesLeft);
 void updateProprietaOggetto(struct proprietaOggetto *daSovrascrivere, struct proprietaOggetto *daCopiare );
-void proiettileF (int pipeout, struct proprietaOggetto *proprieta_proiettile, char (*spostamento)(struct proprietaOggetto*));
+void proiettileF (struct proprietaOggetto *proprieta_proiettile, char (*spostamento)(struct proprietaOggetto*));
 void waitTOJumpIn(struct proprietaOggetto *proprieta_personaggio);
     //comportamenti
     char spostamentoAPassi (struct proprietaOggetto *personaggio, bool isRandom); // gestisce lo spostamento di un personaggio 

@@ -42,7 +42,7 @@ void inizializzaPersonaggi(struct proprietaOggetto *daCopiare, struct proprietaO
     }
 }
 
-void personaggioF (int pipeout, struct proprietaOggetto *proprieta_personaggio, int isAutonomus, char (*spostamento)(struct proprietaOggetto*,bool)){    
+void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonomus, char (*spostamento)(struct proprietaOggetto*,bool)){    
     int bombDrop = customRandom(10,30);
     int counter =0;
 
@@ -50,7 +50,7 @@ void personaggioF (int pipeout, struct proprietaOggetto *proprieta_personaggio, 
     
     printStringIntDebugLog(DEBUGGING,"personaggioF sta per scrivere %d\n", &proprieta_personaggio->istanza);
     fflush(NULL);
-    scrivi(pipeout,proprieta_personaggio);  
+    scrivi(proprieta_personaggio);  
     
     printStringIntDebugLog(DEBUGGING,"personaggioF ha scritto %d\n", &proprieta_personaggio->istanza);
     fflush(NULL);  
@@ -81,7 +81,7 @@ void personaggioF (int pipeout, struct proprietaOggetto *proprieta_personaggio, 
            printStringIntDebugLog(DEBUGGING," !!!!!!!!\nERRORE il personaggio con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &proprieta_personaggio->istanza);
            printPropietaOggetto(proprieta_personaggio);
            proprieta_personaggio->flag=LOST;
-           scrivi(pipeout,proprieta_personaggio); 
+           scrivi(proprieta_personaggio); 
            if (IS_WITH_THREAD){
                 break;
             }
@@ -98,7 +98,7 @@ void personaggioF (int pipeout, struct proprietaOggetto *proprieta_personaggio, 
             pthread_mutex_unlock(&lifes);
         }
 
-        scrivi(pipeout,proprieta_personaggio); 
+        scrivi(proprieta_personaggio); 
     }
 }
 
@@ -302,10 +302,9 @@ void updateProprietaOggetto(struct proprietaOggetto *daSovrascrivere, struct pro
 }
 
 
-void proiettileF (int pipeout, struct proprietaOggetto *proprieta_proiettile, char (*spostamento)(struct proprietaOggetto*)){    
+void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostamento)(struct proprietaOggetto*)){    
     int counter =0;
-    printStringIntDebugLog(DEBUGGING2," pipeout = %d \n", &pipeout);
-    write(pipeout,proprieta_proiettile,sizeof(*proprieta_proiettile));
+    printStringIntDebugLog(DEBUGGING2,"-> proiettileF %d \n", &debugIndex);
     while(1) {
         counter++;
         if(counter==100){
@@ -335,7 +334,7 @@ void proiettileF (int pipeout, struct proprietaOggetto *proprieta_proiettile, ch
             }
             pthread_mutex_unlock(&lifes);
         }
-        write(pipeout,proprieta_proiettile,sizeof(*proprieta_proiettile));
+        scrivi(proprieta_proiettile);
     }
 }
 
@@ -365,52 +364,51 @@ void spara(struct proprietaOggetto proiettile[], struct proprietaOggetto *valore
     setPersonaggio(&proiettile[istanzaProiettile],SEGNAPOSTO_PROIETTILE,valore_letto->x+valore_letto->lunghezzaSegnaposto/2-1,valore_letto->y-1,0,proiettile[istanzaProiettile].vite,istanzaProiettile);                    
     setPersonaggio(&proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI],SEGNAPOSTO_PROIETTILE,valore_letto->x+valore_letto->lunghezzaSegnaposto/2-1,valore_letto->y-1,0,proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI].vite,(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI);                    
 
-    myThreadCreate(&(proiettile[istanzaProiettile]),fileDescriptor,proiettileSX);
-    myThreadCreate(&(proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI]),fileDescriptor,proiettileDX);
+    myThreadCreate(&(proiettile[istanzaProiettile]),proiettileSX);
+    myThreadCreate(&(proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI]),proiettileDX);
 }
 
 
-void *proiettileSX(void* voidComm){
-    struct comunication* comm = (struct comunication*) voidComm;
-    printStringIntDebugLog(DEBUGGING,"-> proiettileSX %d; \n", &comm->personaggio->istanza);
+void *proiettileSX(void* voidPersonaggio){
+    struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
+    printStringIntDebugLog(DEBUGGING,"-> proiettileSX %d; \n", &personaggio->istanza);
 
-    proiettileF(comm->pipeout,comm->personaggio,spostamentoProiettileSX);
+    proiettileF(personaggio,spostamentoProiettileSX);
 }
 
-void *proiettileDX(void* voidComm){
-    struct comunication* comm = (struct comunication*) voidComm;
-    printStringIntDebugLog(DEBUGGING,"-> proiettileDX %d; \n", &comm->personaggio->istanza);
+void *proiettileDX(void* voidPersonaggio){
+    struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
+    printStringIntDebugLog(DEBUGGING,"-> proiettileDX %d; \n", &personaggio->istanza);
 
-    proiettileF(comm->pipeout,comm->personaggio,spostamentoProiettileDX);
+    proiettileF(personaggio,spostamentoProiettileDX);
 }
 
-void *dropBombF(void* voidComm){
-    struct comunication* comm = (struct comunication*) voidComm;
-    printStringIntDebugLog(DEBUGGING,"-> dropBombF %d; \n", &comm->personaggio->istanza);
+void *dropBombF(void* voidPersonaggio){
+    struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
+    printStringIntDebugLog(DEBUGGING,"-> dropBombF %d; \n", &personaggio->istanza);
 
-    proiettileF(comm->pipeout,comm->personaggio,spostamentoDropBomb);
+    proiettileF(personaggio,spostamentoDropBomb);
 }
 
 
 
-void *alienoF(void* voidComm){
-    struct comunication* comm = (struct comunication*) voidComm;
-    printStringIntDebugLog(true,"-> alienoF %d; \n", &comm->personaggio->istanza);
+void *alienoF(void* voidPersonaggio){
+    struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
+    printStringIntDebugLog(true,"-> alienoF %d; \n", &personaggio->istanza);
 
     printStringIntDebugLog(DEBUGGING2,"creato singolo alieno() %d; \n", &debugIndex);
-    printStringIntDebugLog(DEBUGGING2," alieno creato con istanza = %d \n", &comm->personaggio->istanza);
-    srand((int)(comm->personaggio->istanza*(int)time(0)^(1/5)));
-    personaggioF(comm->pipeout,comm->personaggio,true,spostamentoLineare);
+    printStringIntDebugLog(DEBUGGING2," alieno creato con istanza = %d \n", &personaggio->istanza);
+    srand((int)(personaggio->istanza*(int)time(0)^(1/5)));
+    personaggioF(personaggio,true,spostamentoLineare);
 }
 
 
-void *naveSpazialeF(void* voidComm){
-    struct comunication* comm = (struct comunication*) voidComm;
-    printStringIntDebugLog(true,"-> naveSpazialeF %d; \n", &comm->personaggio->istanza);
+void *naveSpazialeF(void* voidPersonaggio){
+    struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
+    printStringIntDebugLog(true,"-> naveSpazialeF %d; \n", &personaggio->istanza);
 
     printStringIntDebugLog(DEBUGGING,"entrato dentro naveSpaziale() %d; \n", &debugIndex);
-    printProprietaOggettoDebugLog(DEBUGGING, comm->personaggio);
-    printStringIntDebugLog(DEBUGGING,"pipe nave:%d\n", &comm->pipeout);
+    printProprietaOggettoDebugLog(DEBUGGING, personaggio);
     printStringIntDebugLog(DEBUGGING2,"setPersonaggio() eseguito %d; \n", &debugIndex);
-    personaggioF(comm->pipeout,comm->personaggio,false,spostamentoAPassiLaterali);
+    personaggioF(personaggio,false,spostamentoAPassiLaterali);
 }

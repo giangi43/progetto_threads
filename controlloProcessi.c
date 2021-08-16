@@ -10,15 +10,15 @@ void pipeCeck(int *p){
     }
 }
 
-void mutexCeck(pthread_mutex_t *m){
-    if(pthread_mutex_init(m, NULL) != 0) {
-        perror("mutex creation");
-        _exit(1);
-    }
-}
+// void mutexCeck(pthread_mutex_t *m){
+//     if(pthread_mutex_init(m, NULL) != 0) {
+//         perror("mutex creation");
+//         _exit(1);
+//     }
+// }
 
 
-void scrivi (int pipeout, struct proprietaOggetto *personaggio){
+void scrivi (struct proprietaOggetto *personaggio){
     printStringCharDebugLog(DEBUGGING,"%c: ",&personaggio->segnaposto[0]);
     printStringIntDebugLog(DEBUGGING, "%d, sta provando a scrivere\n",&personaggio->istanza);
         pthread_mutex_lock(&lock);
@@ -51,20 +51,13 @@ versione modificata del forkSwitch
     anzi che dividere il processo in due da cui partono due funzioni diverse,
     crea un processo figlio che si stacca dal primo lasciando l'esecuzione del padre immutata
 */
-pthread_t myThreadCreate(struct proprietaOggetto* personaggio, int *fileDescriptor, void* (*figlio) (void*)){
+pthread_t myThreadCreate(struct proprietaOggetto* personaggio, void* (*figlio) (void*)){
     printStringCharDebugLog(DEBUGGING,"%c: ",&personaggio->segnaposto[0]);
     printStringIntDebugLog(DEBUGGING, "%d, sto creando il tread\n",&personaggio->istanza);
     printProprietaOggettoDebugLog(DEBUGGING,personaggio);
     fflush(NULL);
 
-    struct comunication *comm = (struct comunication*) malloc(sizeof(struct comunication));
-    printStringIntDebugLog(DEBUGGING, "%d,valore malloc\n",&comm);
-    comm->pipeout = fileDescriptor[1];
-    comm->personaggio=personaggio;
-    printStringIntDebugLog(DEBUGGING, "%d,malloc eseguita\n",&personaggio->istanza);
-    fflush(NULL);
-    //devo correggere void*
-    pthread_create(&personaggio->tid,NULL,figlio,comm);
+    pthread_create(&personaggio->tid,NULL,figlio,personaggio);
     printStringIntDebugLog(DEBUGGING, "%d, tread creato\n",&personaggio->istanza);
     fflush(NULL);
     return personaggio->tid;
@@ -76,11 +69,11 @@ pthread_t myThreadCreate(struct proprietaOggetto* personaggio, int *fileDescript
     crea una serie di processi figli 
     con personaggio e comportamento passati come parametro
 */
-void creaGruppoPersonaggi(struct proprietaOggetto personaggio[], int *fileDescriptor, void* (*figlio) (void*), int numeroPersonaggi){
+void creaGruppoPersonaggi(struct proprietaOggetto personaggio[],  void* (*figlio) (void*), int numeroPersonaggi){
     int i;
     for (i = 0; i < numeroPersonaggi; i++)
     {
-        myThreadCreate(&(personaggio[i]),fileDescriptor,figlio);
+        myThreadCreate(&(personaggio[i]),figlio);
                
     }    
 }
