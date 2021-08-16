@@ -31,14 +31,12 @@ void scrivi (struct proprietaOggetto *personaggio){
 void leggi (int pipein, struct proprietaOggetto *valore_letto){
     
     printStringIntDebugLog(DEBUGGING, "sta provando a leggere %d\n",&debugIndex);
-    if (IS_WITH_THREAD){
-        pthread_mutex_lock(&lock);
-        //read(pipein,valore_letto,sizeof(valore_letto));
-        *valore_letto = pop(codaProprieta);
-        pthread_mutex_unlock(&lock);
-    }else{
-        read(pipein,valore_letto,sizeof(valore_letto));
-    }
+
+    //pthread_mutex_lock(&lock);
+    //read(pipein,valore_letto,sizeof(valore_letto));
+    *valore_letto = pop(codaProprieta);
+    //pthread_mutex_unlock(&lock);
+    
     printStringCharDebugLog(DEBUGGING,"%c: ",&valore_letto->segnaposto[0]);
     printStringIntDebugLog(DEBUGGING, "%d, è stato letto\n",&valore_letto->istanza);
 
@@ -117,10 +115,11 @@ void killIt(struct proprietaOggetto *personaggio){
     if (personaggio->tid!=0){
         deletePropietaOggetto(personaggio);
         //kill(personaggio->pid,1);
-        printStringIntDebugLog(DEBUGGING,"killit pronto per la join %d\n",&debugIndex);
+        printStringIntDebugLog(DEBUGGING,"killit in esecuzione %d\n",&debugIndex);
         //fflush(NULL);
-        pthread_join(personaggio->tid,NULL);
-        printStringIntDebugLog(DEBUGGING,"killit join eseguita %d\n",&debugIndex);
+        //pthread_join(personaggio->tid,NULL);
+        personaggio->flag=LOST;
+        printStringIntDebugLog(true,"killit eseguita %d\n",&debugIndex);
         
         personaggio->tid = 0;  
         deletePropietaOggetto(personaggio); 

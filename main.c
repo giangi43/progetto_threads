@@ -1,7 +1,10 @@
 #include "header.h"
 
 int main(){
-    
+    numeroGiriCiclo=0;
+    numeroClick=0;
+
+
     //pid_t pid_alieni, pid_naveSpaziale;
     int comand;
     NUMERO_ALIENI = D_NUMERO_ALIENI;
@@ -41,8 +44,8 @@ int main(){
 
     
     
-    createDebugLog(DEBUGGING||DEBUGGING2);
-    printDebugLog(DEBUGGING||DEBUGGING2);
+    createDebugLog(true);
+    printDebugLog(true);
     printDebugLog(DEBUGGING);
     printf("miao");
     
@@ -213,7 +216,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
             {                   
                 killIt(&dropBomb[istanzaDropBomb]);
                 setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,valore_letto.x,valore_letto.y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
-                myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
+                //myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
                 aliveProcesses++;
                 istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
             }
@@ -244,7 +247,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
             {                   
                 killIt(&dropBomb[istanzaDropBomb]);
                 setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,valore_letto.x,valore_letto.y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
-                myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
+                //myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
                 aliveProcesses++;
                 istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
             }

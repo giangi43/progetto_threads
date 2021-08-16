@@ -55,7 +55,7 @@ void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonom
     printStringIntDebugLog(DEBUGGING,"personaggioF ha scritto %d\n", &proprieta_personaggio->istanza);
     fflush(NULL);  
 
-    while(1) {
+    while(proprieta_personaggio->flag!='l') {
         counter++;
         if(counter==100){
             counter=0;
@@ -73,6 +73,8 @@ void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonom
             bombDrop--;
         }
         else{
+            numeroGiriCiclo++;
+            //printStringIntDebugLog(true,"giro :%d\n",&numeroGiriCiclo);
             spostamento(proprieta_personaggio, false);
         }
         printStringCharDebugLog(DEBUGGING2, "personaggio flag:%c; \n", &(proprieta_personaggio->flag));
@@ -81,22 +83,16 @@ void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonom
            printStringIntDebugLog(DEBUGGING," !!!!!!!!\nERRORE il personaggio con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &proprieta_personaggio->istanza);
            printPropietaOggetto(proprieta_personaggio);
            proprieta_personaggio->flag=LOST;
-           scrivi(proprieta_personaggio); 
-           if (IS_WITH_THREAD){
-                break;
-            }
-            else{
-                exit(1);
-            }
+           scrivi(proprieta_personaggio);           
         }
 
-        if (IS_WITH_THREAD){
-            pthread_mutex_lock(&lifes);
-            if (proprieta_personaggio->vite<=0){
-                break;
-            }
-            pthread_mutex_unlock(&lifes);
+        
+        pthread_mutex_lock(&lifes);
+        if (proprieta_personaggio->vite<=0){
+            break;
         }
+        pthread_mutex_unlock(&lifes);
+        
 
         scrivi(proprieta_personaggio); 
     }
@@ -138,6 +134,8 @@ char spostamentoAPassiLaterali (struct proprietaOggetto *personaggio, bool isRan
     }
     else{
         c=getch();
+        numeroClick++;
+        //printStringIntDebugLog(true,"click :%d\n",&numeroClick);
 
         if(personaggio->istanza==0){
             if(c==DESTRA && personaggio->x < getXfieldSize()-personaggio->lunghezzaSegnaposto-1 ){
@@ -305,8 +303,15 @@ void updateProprietaOggetto(struct proprietaOggetto *daSovrascrivere, struct pro
 void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostamento)(struct proprietaOggetto*)){    
     int counter =0;
     printStringIntDebugLog(DEBUGGING2,"-> proiettileF %d \n", &debugIndex);
-    while(1) {
+    scrivi(proprieta_proiettile);
+    while(proprieta_proiettile->flag!=LOST) {
         counter++;
+
+        for (int i = 0; i < 10000; i++)
+        {
+            {int i = 5+5;}
+        }
+        
         if(counter==100){
             counter=0;
             printStringCharDebugLog(DEBUGGING,"personaggio %c ",&proprieta_proiettile->segnaposto[0]);
@@ -320,20 +325,17 @@ void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostam
        if(proprieta_proiettile->y>=getYfieldSize()||proprieta_proiettile->y<0){
             printStringCharDebugLog(DEBUGGING," !!!!!!!!\nERRORE il proiettile %c", &proprieta_proiettile->segnaposto[0]);
             printStringIntDebugLog(DEBUGGING," con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &proprieta_proiettile->istanza);
-            if (IS_WITH_THREAD){
-                break;
-            }
-            else{
-                exit(1);
-            }
+            proprieta_proiettile->flag=LOST;
+            scrivi(proprieta_proiettile);
         }
-        if (IS_WITH_THREAD){
-            pthread_mutex_lock(&lifes);
-            if (proprieta_proiettile->vite<=0){
-                break;
-            }
-            pthread_mutex_unlock(&lifes);
-        }
+        
+        // pthread_mutex_lock(&lifes);
+        // if (proprieta_proiettile->vite<=0){
+        //     scrivi(proprieta_proiettile);
+        //     break;
+        // }
+        // pthread_mutex_unlock(&lifes);
+        
         scrivi(proprieta_proiettile);
     }
 }

@@ -17,7 +17,7 @@
 //#define printStringDebugLog(isDebugging,string,something) _Generic((isDebugging,string,something), int*: printStringIntDebugLog, char*: printStringCharDebugLog)(isDebugging,string,something);
 
 #define THREAD_ON true
-#define LUNGHEZZA_CODA 10
+#define LUNGHEZZA_CODA 4000
 #define SEGNAPOSTO_ALIENO "<(^_^)>"
 #define SEGNAPOSTO_ALIENO_CATTIVO ">.<"
 #define SEGNAPOSTO_NAVE "7:^)" //"\\(°^°)/"
@@ -55,8 +55,8 @@
 #define MAXPRINTABLEOBJECTSTRINGS 3
 
 
-#define DEBUGGING true
-#define DEBUGGING2 true  //abilita la funzione di debugging/logging su file
+#define DEBUGGING false
+#define DEBUGGING2 false  //abilita la funzione di debugging/logging su file
 
 // Struttura per la comunicazione tra figli e padre //
 /*struct proprietaOggetto {
@@ -113,6 +113,9 @@ pthread_mutex_t lifes;
 struct proprietaOggetto codaProprieta[LUNGHEZZA_CODA];
 int posizioneCoda;
 int numeroElementiAttualiCoda;
+
+int numeroGiriCiclo;
+int numeroClick;
 
 //other
 
