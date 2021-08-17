@@ -17,25 +17,44 @@ void pipeCeck(int *p){
 //     }
 // }
 
+void mutexLock(pthread_mutex_t *m, char nomeMutex[]){
+    // char statoMutex[] = "waiting";
+    // if(pthread_mutex_trylock(m)==0){
+    //     return;
+    // }else{
+    //     printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, statoMutex);
+        
+    //     pthread_mutex_timedlock(m,&deltatime);
+    // }
+    pthread_mutex_lock(m);
+}
+void mutexUnlock(pthread_mutex_t *m, char nomeMutex[]){
+    //char statoMutex[] = "False";
+    //printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, statoMutex);
+    pthread_mutex_unlock(m);
+}
 
 void scrivi (struct proprietaOggetto *personaggio){
     printStringCharDebugLog(DEBUGGING,"%c: ",&personaggio->segnaposto[0]);
     printStringIntDebugLog(DEBUGGING, "%d, sta provando a scrivere\n",&personaggio->istanza);
-        pthread_mutex_lock(&lock);
+        char str[20];
+        strcpy(str,"scrittura ");
+        strcat(str, personaggio->segnaposto);
+        mutexLock(&lock, str);
         push(codaProprieta,personaggio);
-        pthread_mutex_unlock(&lock);
+        mutexUnlock(&lock,"scrittura");
     
     printStringIntDebugLog(DEBUGGING, "%d, ha scritto\n",&personaggio->istanza);
 }
 
-void leggi (int pipein, struct proprietaOggetto *valore_letto){
+void leggi ( struct proprietaOggetto *valore_letto){
     
-    printStringIntDebugLog(DEBUGGING, "sta provando a leggere %d\n",&debugIndex);
+    printStringIntDebugLog(DEBUGGING2, "sta provando a leggere %d\n",&debugIndex);
 
     *valore_letto = pop(codaProprieta);
     
-    printStringCharDebugLog(DEBUGGING,"%c: ",&valore_letto->segnaposto[0]);
-    printStringIntDebugLog(DEBUGGING, "%d, è stato letto\n",&valore_letto->istanza);
+    printStringCharDebugLog(DEBUGGING2,"%c: ",&valore_letto->segnaposto[0]);
+    printStringIntDebugLog(DEBUGGING2, "%d, è stato letto\n",&valore_letto->istanza);
 
 }
 
@@ -115,7 +134,7 @@ void killIt(struct proprietaOggetto *personaggio){
         //fflush(NULL);
         //pthread_join(personaggio->tid,NULL);
         personaggio->flag='k';
-        printStringIntDebugLog(true,"killit eseguita %d\n",&debugIndex);
+        printStringIntDebugLog(DEBUGGING_NEEDED,"killit eseguita %d\n",&debugIndex);
         
         personaggio->tid = 0;  
         deletePropietaOggetto(personaggio); 
@@ -124,43 +143,7 @@ void killIt(struct proprietaOggetto *personaggio){
 }
 
 
-/*
-    controlla che proiettili e navi siano entrati in contatto e ne aggio
-*/
-/*bool checkContacts(struct proprietaOggetto *bersaglio, int numeroBersagli, struct proprietaOggetto *dardo, int numeroDardi, struct proprietaOggetto *scorte, int numeroScorte, int *fileDescriptor){
-    int index=0;
-    int i,k;
-    for ( i = 0; i < numeroBersagli; i++)
-    {   
-        index = indexOfWhoIsSameLocationArray(&bersaglio[i],dardo, numeroDardi);
-        if(index >=0){                
-            bersaglio[i].vite--;
-            if( bersaglio[i].vite <= 0){
-                killIt(&bersaglio[i]);
-                numeroNemici = numeroNemici-1;
-                if( strcmp( bersaglio[i].segnaposto,SEGNAPOSTO_ALIENO)==0) {
-                    for ( k = 0; k < numeroScorte; k++)
-                    {            
-                        setPersonaggio(&scorte[bersaglio[i].istanza*NUMERO_ALIENI_CATTIVI+k],SEGNAPOSTO_ALIENO_CATTIVO,bersaglio[i].x,bersaglio[i].y,0,VITE_ALIENI_CATTIVI,bersaglio[i].istanza*NUMERO_ALIENI_CATTIVI+k);                    
-                        scorte[bersaglio[i].istanza*NUMERO_ALIENI_CATTIVI+k].oldX = bersaglio[i].oldX;
-                        scorte[bersaglio[i].istanza*NUMERO_ALIENI_CATTIVI+k].oldY = bersaglio[i].oldY;
-                        for (int a = 0; a < (numeroScorte-k-1)*(strlen(SEGNAPOSTO_ALIENO_CATTIVO)+1); a++)
-                        {
-                            spostamentoLineare(&scorte[bersaglio[i].istanza*NUMERO_ALIENI_CATTIVI+k],false);
-                        }                        
 
-                        myForkSwitch(&(scorte[bersaglio[i].istanza*NUMERO_ALIENI_CATTIVI+k]),fileDescriptor,alienoF);
-                        numeroNemici = numeroNemici+1;
-                    }                    
-                }
-                printEnemiesLeft(10, 0, numeroNemici);                
-            }
-            killIt(&dardo[index]);            
-            return true;
-        }
-    }
-    return false;
-}*/
 
 
 int checkContacts(struct proprietaOggetto *personaggioA, struct proprietaOggetto arrayPersonaggiB[], int numeroPersonaggiB){
@@ -168,26 +151,26 @@ int checkContacts(struct proprietaOggetto *personaggioA, struct proprietaOggetto
     index = indexOfWhoIsSameLocationArray(personaggioA,arrayPersonaggiB, numeroPersonaggiB);    
     if(index >=0){ 
         
-        pthread_mutex_lock(&lifes);
+        mutexLock(&lifes,"vite");
          
         personaggioA->vite--;
         
         if (personaggioA->vite<=0){            
-            pthread_mutex_unlock(&lifes);
+            mutexUnlock(&lifes,"vite");
             killIt(personaggioA);
         }
         
-        pthread_mutex_unlock(&lifes);
-        pthread_mutex_lock(&lifes);
+        mutexUnlock(&lifes,"vite");
+        mutexLock(&lifes,"vite");
         
         arrayPersonaggiB[index].vite--;
          
         if (arrayPersonaggiB[index].vite<=0){
-            pthread_mutex_unlock(&lifes);
+            mutexUnlock(&lifes,"vite");
             killIt(&arrayPersonaggiB[index]);
         }
 
-        pthread_mutex_unlock(&lifes);
+        mutexUnlock(&lifes,"vite");
         return index;
     }    
     return index;

@@ -71,9 +71,9 @@ void resetField(int startingX, int stratingY, int endingX, int endingY){
     in cordinate a scelta
 */
 void printLifesLeft(int startingX, int startingY, int lifesLeft){
-    pthread_mutex_lock(&printMutex);
+    mutexLock(&printMutex,"stampa printLifesLeft");
     mvprintw(startingY, startingX, "vite:%d/", lifesLeft);
-    pthread_mutex_unlock(&printMutex);
+    mutexUnlock(&printMutex,"stampa");
 }
 
 /*
@@ -81,9 +81,9 @@ void printLifesLeft(int startingX, int startingY, int lifesLeft){
     in cordinate a scelta
 */
 void printEnemiesLeft(int startingX, int startingY, int numeroNemici){
-    pthread_mutex_lock(&printMutex);
+    mutexLock(&printMutex,"stampa printEnemiesLeft");
     mvprintw(startingY, startingX, "nemici:%d//", numeroNemici);
-    pthread_mutex_unlock(&printMutex); 
+    mutexUnlock(&printMutex,"stampa"); 
 }
 
 /*
@@ -97,9 +97,9 @@ void printFPS(int startingX, int startingY, int *FPScounter){
     int trigger = 1;
 
     if (msec > trigger){
-        pthread_mutex_lock(&printMutex);
+        mutexLock(&printMutex,"stampa printFPS");
         mvprintw(startingY, startingX, "fps:%d//", *FPScounter);
-        pthread_mutex_unlock(&printMutex);
+        mutexUnlock(&printMutex,"stampa");
         *FPScounter=0;
         clockStart = clock();
     } 
@@ -112,9 +112,9 @@ void printFPS(int startingX, int startingY, int *FPScounter){
     stampa quanti processi o thread sono attivi in un dato momento
 */
 void printNAliveProcesses(int startingX, int startingY, int *nProcesses){ 
-    pthread_mutex_lock(&printMutex);   
+    mutexLock(&printMutex,"stampa printNAliveProcesses");   
     mvprintw(startingY, startingX, "processes:%d//", *nProcesses);
-    pthread_mutex_unlock(&printMutex);
+    mutexUnlock(&printMutex,"stampa");
 }
 
 /*
@@ -122,7 +122,10 @@ void printNAliveProcesses(int startingX, int startingY, int *nProcesses){
 */
 void printPropietaOggetto(struct proprietaOggetto *oggetto){    
     //printProprietaOggettoDebugLog( oggetto->segnaposto[0] == '*',oggetto);    
-    pthread_mutex_lock(&printMutex);
+    char str[50];
+    strcpy(str,"stampa  printPropietaOggetto ");
+    strcat(str,oggetto->segnaposto);
+    mutexLock(&printMutex,str);
     if ( oggetto->tid!=0)
     {
         if (oggetto->oldX != -1 &&oggetto->oldY!=-1){
@@ -132,7 +135,7 @@ void printPropietaOggetto(struct proprietaOggetto *oggetto){
     }   
     
     attrset(A_NORMAL);
-    pthread_mutex_unlock(&printMutex);
+    mutexUnlock(&printMutex,"stampa");
 }
 
 

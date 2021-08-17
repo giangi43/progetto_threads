@@ -30,7 +30,7 @@ void printDebugLog(bool isDebugging){
 
 void printStringIntDebugLog(bool isDebugging, char* string, int *something){
     if (isDebugging){
-        pthread_mutex_lock(&debug);
+        mutexLock(&debug,"debug");
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
             //printf("Error in printStringDebugLog");   
@@ -39,12 +39,12 @@ void printStringIntDebugLog(bool isDebugging, char* string, int *something){
         fprintf(fptr,string, *something);
         fclose(fptr);
         debugIndex++;
-        pthread_mutex_unlock(&debug);
+        mutexUnlock(&debug,"debug");
     }    
 }
 void printStringCharDebugLog(bool isDebugging, char* string,char *something){
     if (isDebugging){
-        pthread_mutex_lock(&debug);
+        mutexLock(&debug,"debug");
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
             //printf("Error in printStringDebugLog");   
@@ -53,13 +53,13 @@ void printStringCharDebugLog(bool isDebugging, char* string,char *something){
         fprintf(fptr,string, *something);
         fclose(fptr);
         debugIndex++;
-        pthread_mutex_unlock(&debug);
+        mutexUnlock(&debug,"debug");
     }
 }
 
 void printStringStringDebugLog(bool isDebugging, char* string,char something[]){
     if (isDebugging){
-        pthread_mutex_lock(&debug);
+        mutexLock(&debug,"debug");
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
             //printf("Error in printStringDebugLog");   
@@ -68,13 +68,13 @@ void printStringStringDebugLog(bool isDebugging, char* string,char something[]){
         fprintf(fptr,string, something);
         fclose(fptr);
         debugIndex++;
-        pthread_mutex_unlock(&debug);
+        mutexUnlock(&debug,"debug");
     }
 }
 
 void printProprietaOggettoDebugLog(bool isDebugging,struct proprietaOggetto *personaggio){
     if (isDebugging){
-        pthread_mutex_lock(&debug);
+        mutexLock(&debug,"debug");
         fptr = fopen("debugLog.txt","a");
         if(fptr == NULL){
             //printf("Error in printStringDebugLog");   
@@ -96,6 +96,19 @@ void printProprietaOggettoDebugLog(bool isDebugging,struct proprietaOggetto *per
         fclose(fptr);
         fflush(NULL);
         debugIndex++;
-        pthread_mutex_unlock(&debug);
+        mutexUnlock(&debug,"debug");
     }   
+}
+
+void printMutexDebugLog(bool isDebugging, char nomeMutex[], char statoMutex[]){
+    if (isDebugging){
+        fptr = fopen("debugLog.txt","a");
+        if(fptr == NULL){
+            //printf("Error in printStringDebugLog");   
+            exit(1);             
+        }
+        fprintf(fptr,"mutex:%s;  stato:%s;\n", nomeMutex,statoMutex);
+        fclose(fptr);
+        debugIndex++;
+    }    
 }

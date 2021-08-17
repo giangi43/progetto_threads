@@ -24,7 +24,7 @@
 #define SEGNAPOSTO_PROIETTILE "*"
 #define SEGNAPOSTO_DROPBOMB "o"
 #define LUNGHEZZA_SEGNAPOSTO 7
-#define D_NUMERO_ALIENI 8
+#define D_NUMERO_ALIENI 1
 #define D_NUMERO_ALIENI_CATTIVI 0
 #define D_NUMERO_GIOCATORI 1
 #define D_NUMERO_MAX_PROIETTILI 20
@@ -54,8 +54,9 @@
 #define MAX_STRING_SIZE 20
 #define MAXPRINTABLEOBJECTSTRINGS 3
 
-
-#define DEBUGGING false
+#define DEBUGGING_NEEDED true
+#define DEBUGGING_MUTEX true
+#define DEBUGGING true
 #define DEBUGGING2 false  //abilita la funzione di debugging/logging su file
 
 // Struttura per la comunicazione tra figli e padre //
@@ -117,6 +118,10 @@ int numeroElementiAttualiCoda;
 int numeroGiriCiclo;
 int numeroClick;
 
+struct timespec deltatime;
+    
+
+
 //other
 
 
@@ -141,8 +146,10 @@ struct proprietaOggetto pop(struct proprietaOggetto coda[]);
 // controllo processi
 void pipeCeck(int *p); //controlla che la pipe sia stata eseguita correttamente
 //void mutexCeck(pthread_mutex_t *m);
+void mutexLock(pthread_mutex_t *m, char nomeMutex[]);
+void mutexUnlock(pthread_mutex_t *m, char nomeMutex[]);
 void scrivi (struct proprietaOggetto *personaggio);
-void leggi (int pipein, struct proprietaOggetto *valore_letto);
+void leggi ( struct proprietaOggetto *valore_letto);
 pid_t myForkSwitch(struct proprietaOggetto *personaggio, int *fileDescriptor, void* (*figlio) (void*));
 pthread_t myThreadCreate(struct proprietaOggetto *personaggio, void* (*figlio) (void*));
 void forkSwitch(pid_t *pid, int *fileDescriptor, void (*padre) (int), void (*figlio) (int)); // esegue una fork
@@ -202,3 +209,4 @@ int customRandom(int min, int max);
 void createDebugLog(bool isDebugging);
 void printDebugLog(bool isDebugging);
 void printProprietaOggettoDebugLog(bool isDebugging,struct proprietaOggetto *personaggio);
+void printMutexDebugLog(bool isDebugging, char nomeMutex[], char statoMutex[]);

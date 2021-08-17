@@ -4,6 +4,9 @@ int main(){
     numeroGiriCiclo=0;
     numeroClick=0;
 
+    deltatime.tv_sec=0;
+    deltatime.tv_nsec=100000;
+
 
     //pid_t pid_alieni, pid_naveSpaziale;
     int comand;
@@ -80,9 +83,9 @@ int main(){
             numeroElementiAttualiCoda=0;
             
             attrset(A_NORMAL);
-            printStringIntDebugLog(true,"-> controllo %d; \n", &debugIndex);
+            printStringIntDebugLog(DEBUGGING_NEEDED,"-> controllo %d; \n", &debugIndex);
             controllo (NULL);
-            printStringIntDebugLog(true,"controllo ->%d; \n", &debugIndex);
+            printStringIntDebugLog(DEBUGGING_NEEDED,"controllo ->%d; \n", &debugIndex);
 
         }
 
@@ -112,7 +115,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
     int i =0, j=0, index =0;
     //printStringIntDebugLog(DEBUGGING," pipeout = %d \n",&fileDescriptor[1]);
 
-    printStringIntDebugLog(true,"-> settaggio personaggi (controllo)  %d; \n", &debugIndex);
+    printStringIntDebugLog(DEBUGGING_NEEDED,"-> settaggio personaggi (controllo)  %d; \n", &debugIndex);
 
     setPersonaggio(&valore_letto,SEGNAPOSTO_NAVE,getXfieldSize()/2,getYfieldSize()-3,0,VITE_NAVE,0);
     inizializzaPersonaggi(&valore_letto,naveSpaziale,NUMERO_GIOCATORI);
@@ -141,7 +144,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
 
     setPersonaggio(&valore_letto,SEGNAPOSTO_DROPBOMB,1,1,0,1,0);
     inizializzaPersonaggi(&valore_letto,dropBomb,NUMERO_MAX_PROIETTILI);
-    printStringIntDebugLog(true,"settaggio personaggi (controllo) -> %d; \n", &debugIndex);
+    printStringIntDebugLog(DEBUGGING_NEEDED,"settaggio personaggi (controllo) -> %d; \n", &debugIndex);
     
     resetField(0, 0, getXfieldSize(), getYfieldSize());
     attron(A_BOLD);
@@ -154,21 +157,24 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
     curs_set(0);    
     refresh();
 
-    printStringIntDebugLog(true,"-> ciclo (controllo) %d; \n", &debugIndex);
+    printStringIntDebugLog(DEBUGGING_NEEDED,"-> ciclo (controllo) %d; \n", &debugIndex);
 
     do { 
-        printStringIntDebugLog(DEBUGGING,"entrato %d\n", &debugIndex);
-        fflush(NULL);
+        //printStringIntDebugLog(DEBUGGING,"entrato %d\n", &debugIndex);
+        //fflush(NULL);
 
         //read(pipein,&valore_letto,sizeof(valore_letto)); // leggo dalla pipe //
-        leggi (NULL,&valore_letto);
-
+        leggi (&valore_letto);
+        if(valore_letto.flag!='v'){
+            //mutexLock(&valore_letto.mutex, valore_letto.segnaposto);
+            printStringIntDebugLog(DEBUGGING2,"inizio %d\n", &debugIndex);
+            printProprietaOggettoDebugLog(DEBUGGING2, &valore_letto);
+            //fflush(NULL);
+        }
         if(valore_letto.flag==LOST){
             break;
         }
-        printStringIntDebugLog(DEBUGGING,"inizio %d\n", &debugIndex);
-        printProprietaOggettoDebugLog(DEBUGGING, &valore_letto);
-        fflush(NULL);
+        
         /*
             gestisco il caso della nave
         */
@@ -313,11 +319,11 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         /*
             gestisco il caso di un errore
         */ 
-        else{
+        else if( valore_letto.flag!='v'){
             printStringIntDebugLog(DEBUGGING,"qualcosa è andato storto dentro a controllo %d\n",&debugIndex);
             printProprietaOggettoDebugLog(DEBUGGING,&valore_letto);
         }
-        
+        mutexUnlock(&valore_letto.mutex, valore_letto.segnaposto);
         printNAliveProcesses(getXfieldSize()-15,0,&aliveProcesses);
         refresh();
     } while (viteTotali >0 && valore_letto.flag!=QUIT && numeroNemici>0 && valore_letto.flag!=LOST); // ciclo fino al verificarsi di una collisione alieni/naveSpaziale //

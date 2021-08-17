@@ -64,6 +64,7 @@ void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonom
         }        
         if(isAutonomus){
             napms(VELOCITA_PERSONAGGI);
+            //mutexLock(&proprieta_personaggio->mutex,proprieta_personaggio->segnaposto);
             spostamento(proprieta_personaggio, false);                      
             if (bombDrop==0)
             {
@@ -75,6 +76,7 @@ void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonom
         else{
             numeroGiriCiclo++;
             //printStringIntDebugLog(true,"giro :%d\n",&numeroGiriCiclo);
+            napms(VELOCITA_PERSONAGGI/10);
             spostamento(proprieta_personaggio, false);
         }
         printStringCharDebugLog(DEBUGGING2, "personaggio flag:%c; \n", &(proprieta_personaggio->flag));
@@ -87,13 +89,14 @@ void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonom
         }
 
         
-        pthread_mutex_lock(&lifes);
+        //mutexLock(&lifes,"vite");
         if (proprieta_personaggio->vite<=0){
+            //mutexUnlock(&lifes,"vite");
             break;
         }
-        pthread_mutex_unlock(&lifes);
+        //mutexUnlock(&lifes,"vite");
         
-
+        mutexUnlock(&proprieta_personaggio->mutex,proprieta_personaggio->segnaposto);
         scrivi(proprieta_personaggio); 
     }
 }
@@ -329,12 +332,12 @@ void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostam
             break;
         }
         
-        // pthread_mutex_lock(&lifes);
+        // mutexLock(&lifes,"vite");
         // if (proprieta_proiettile->vite<=0){
         //     scrivi(proprieta_proiettile);
         //     break;
         // }
-        // pthread_mutex_unlock(&lifes);
+        // mutexUnlock(&lifes,"vite");
         
         scrivi(proprieta_proiettile);
         //stampo
@@ -399,7 +402,7 @@ void *dropBombF(void* voidPersonaggio){
 
 void *alienoF(void* voidPersonaggio){
     struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
-    printStringIntDebugLog(true,"-> alienoF %d; \n", &personaggio->istanza);
+    printStringIntDebugLog(DEBUGGING_NEEDED,"-> alienoF %d; \n", &personaggio->istanza);
 
     printStringIntDebugLog(DEBUGGING2,"creato singolo alieno() %d; \n", &debugIndex);
     printStringIntDebugLog(DEBUGGING2," alieno creato con istanza = %d \n", &personaggio->istanza);
@@ -410,7 +413,7 @@ void *alienoF(void* voidPersonaggio){
 
 void *naveSpazialeF(void* voidPersonaggio){
     struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
-    printStringIntDebugLog(true,"-> naveSpazialeF %d; \n", &personaggio->istanza);
+    printStringIntDebugLog(DEBUGGING_NEEDED,"-> naveSpazialeF %d; \n", &personaggio->istanza);
 
     printStringIntDebugLog(DEBUGGING,"entrato dentro naveSpaziale() %d; \n", &debugIndex);
     printProprietaOggettoDebugLog(DEBUGGING, personaggio);

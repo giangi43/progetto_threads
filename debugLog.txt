@@ -1,27 +1,278 @@
 0; 
--> controllo 1; 
--> settaggio personaggi (controllo)  2; 
+1; 
+-> controllo 2; 
+entrato dentro controllo() 3; -> settaggio personaggi (controllo)  4; 
+7: 0, sto creando il tread
+{
+	7:^)
+	lunghezza segnaposto: 4
+	istanza: 0
+	tid: 0
+	flag: 0
+	vite: 6
+	X: 16
+	Y: 20
+	oldX: -1
+	oldY: -1
+}
+0, tread creato
+ creata nave 9 
+<: 0, sto creando il tread
+{
+	<(^_^)>
+	lunghezza segnaposto: 7
+	istanza: 0
+	tid: 0
+	flag: 0
+	vite: 2
+	X: 1
+	Y: 1
+	oldX: -1
+	oldY: -1
+}
 -> naveSpazialeF 0; 
+entrato dentro naveSpaziale() 14; 
+{
+	7:^)
+	lunghezza segnaposto: 4
+	istanza: 0
+	tid: -1291843840
+	flag: 0
+	vite: 6
+	X: 16
+	Y: 20
+	oldX: -1
+	oldY: -1
+}
+personaggioF sta per scrivere 0
+7: 0, sta provando a scrivere
+0, ha scritto
+personaggioF ha scritto 0
 -> alienoF 0; 
--> alienoF 1; 
--> alienoF 2; 
--> alienoF 3; 
--> alienoF 4; 
--> alienoF 5; 
--> alienoF 6; 
-settaggio personaggi (controllo) -> 11; 
--> alienoF 7; 
--> ciclo (controllo) 13; 
-killit eseguita 14
-killit eseguita 15
-killit eseguita 16
-killit eseguita 17
-killit eseguita 18
-killit eseguita 19
-killit eseguita 20
-killit eseguita 21
-killit eseguita 22
-killit eseguita 23
-killit eseguita 24
-killit eseguita 25
-killit eseguita 26
+personaggioF sta per scrivere 0
+<: 0, sta provando a scrivere
+0, ha scritto
+personaggioF ha scritto 0
+0, tread creato
+ creati alieni = 28 
+ inizializzati alieni cattivi = 29 
+settaggio personaggi (controllo) -> 30; 
+-> ciclo (controllo) 31; 
+<: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 0
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 13
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+0, tread creato
+*: 1, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 1
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 13
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 0; 
+*: 0, sta provando a scrivere
+0, ha scritto
+-> proiettileDX 1; 
+*: 1, sta provando a scrivere
+1, ha scritto
+1, tread creato
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+killit in esecuzione 219
+killit eseguita 220
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+killit in esecuzione 266
+killit eseguita 267
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+*: 1, sta provando a scrivere
+1, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+*: 0, sta provando a scrivere
+0, ha scritto
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 1  si e eliminato da solo
+!!!!!!!!!
+<: 0, sta provando a scrivere
+0, ha scritto
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 0  si e eliminato da solo
+!!!!!!!!!
+<: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+<: 0, sta provando a scrivere
+0, ha scritto
+7: 0, sta provando a scrivere
+0, ha scritto
+ kill Them All! < 
+killit in esecuzione 303
+killit eseguita 304
+ kill Them All! 7 
+killit in esecuzione 306
+killit eseguita 307
+ kill Them All! o 
+ kill Them All! * 
+ kill Them All! < 
+controllo ->311; 
