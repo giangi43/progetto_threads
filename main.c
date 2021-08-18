@@ -21,6 +21,20 @@ int main(){
     VELOCITA_PROIETTILI = D_VELOCITA_PROIETTILI;
     VELOCITA_PERSONAGGI = D_VELOCITA_PERSONAGGI;
     IS_WITH_THREAD = THREAD_ON;
+
+    struct proprietaOggetto talieno[NUMERO_ALIENI];
+    struct proprietaOggetto talienoCattivo[NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI];
+    struct proprietaOggetto tnaveSpaziale[NUMERO_GIOCATORI];
+    //struct proprietaOggetto valore_letto;
+    struct proprietaOggetto tdropBomb[NUMERO_MAX_PROIETTILI];
+    struct proprietaOggetto tproiettile[NUMERO_MAX_PROIETTILI];
+    alieno = talieno;
+    alienoCattivo = talienoCattivo;
+    naveSpaziale = tnaveSpaziale;
+    //valore_letto = &tvalore_letto;
+    dropBomb= tdropBomb;
+    proiettile=tproiettile;
+
     char mainMenu[][25]={"PLAY","OPTION","QUIT"};
     char optionMenu[][25]={ "numero alieni",
                             "numero alieni cattivi",                        
@@ -99,14 +113,9 @@ int main(){
 
 void controllo (){
 printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex);
-    struct proprietaOggetto alieno[NUMERO_ALIENI];
-    struct proprietaOggetto alienoCattivo[NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI];
-    struct proprietaOggetto naveSpaziale[NUMERO_GIOCATORI];
     struct proprietaOggetto valore_letto;
-    struct proprietaOggetto dropBomb[NUMERO_MAX_PROIETTILI];
-    struct proprietaOggetto proiettile[NUMERO_MAX_PROIETTILI];
-    int istanzaProiettile=0;
-    int istanzaDropBomb=0;
+    istanzaProiettile=0;
+    istanzaDropBomb=0;
     int viteTotali=NUMERO_GIOCATORI*VITE_NAVE;
     numeroNemici=NUMERO_ALIENI;
     clockStart = clock();
@@ -177,7 +186,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         
         /*
             gestisco il caso della nave
-        */
+        
         if (SEGNAPOSTO_NAVE[0]==valore_letto.segnaposto[0]){
             //aggiorno
             updateProprietaOggetto(&naveSpaziale[valore_letto.istanza],&valore_letto);
@@ -208,7 +217,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         }
         /*
             gestisco il caso dell' alieno
-        */            
+                    
         else if (SEGNAPOSTO_ALIENO[0]==valore_letto.segnaposto[0]){
             //aggiorno
             updateProprietaOggetto(&alieno[valore_letto.istanza],&valore_letto);
@@ -235,7 +244,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         
         /*
             gestisco il caso dell' alieno CATTIVO
-        */ 
+        
         else if (SEGNAPOSTO_ALIENO_CATTIVO[0]==valore_letto.segnaposto[0]){
             //aggiorno
             updateProprietaOggetto(&alienoCattivo[valore_letto.istanza],&valore_letto);
@@ -266,13 +275,13 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         
         /*
             gestisco il caso del proiettile
-        */ 
+         
         else if (SEGNAPOSTO_PROIETTILE[0]==valore_letto.segnaposto[0]){
            //printProprietaOggettoDebugLog(DEBUGGING,&proiettile[valore_letto.istanza]);
             //aggiorno
             if (isOutOfBound(&proiettile[valore_letto.istanza])){
                 killIt(&proiettile[valore_letto.istanza]);
-            }else/* if (proiettile[valore_letto.istanza].pid!=0)*/{
+            }else/* if (proiettile[valore_letto.istanza].pid!=0){
                 updateProprietaOggetto(&proiettile[valore_letto.istanza],&valore_letto);
 
                 //controllo contatti e agisco di conseguenza
@@ -287,7 +296,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
                 //controllo contatti e agisco di conseguenza
                 index = checkContacts(&proiettile[valore_letto.istanza],alieno,NUMERO_ALIENI);
                 if(0<=index){
-                    controlloAlieno(NULL,&alieno[index], alienoCattivo);
+                    controlloAlieno(&alieno[index], alienoCattivo);
                 }
                 //stampo
                 // attron(COLOR_PAIR(2));
@@ -297,7 +306,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         
         /*
             gestisco il caso della bomba
-        */ 
+         
         else if(SEGNAPOSTO_DROPBOMB[0]==valore_letto.segnaposto[0]){
             //aggiorno
             if (isOutOfBound(&dropBomb[valore_letto.istanza])){
@@ -326,7 +335,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         mutexUnlock(&valore_letto.mutex, valore_letto.segnaposto);
         printNAliveProcesses(getXfieldSize()-15,0,&aliveProcesses);
         refresh();
-    } while (viteTotali >0 && valore_letto.flag!=QUIT && numeroNemici>0 && valore_letto.flag!=LOST); // ciclo fino al verificarsi di una collisione alieni/naveSpaziale //
+    } while (viteTotali >0 && valore_letto.flag!=QUIT && /*numeroNemici>0 &&*/ valore_letto.flag!=LOST); // ciclo fino al verificarsi di una collisione alieni/naveSpaziale //
 
     killThemAll(alieno, NUMERO_ALIENI);
     killThemAll(naveSpaziale, NUMERO_GIOCATORI);
@@ -352,33 +361,17 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
 }
 
 
-/*
-    gestisce la parte relativa a come appare la nave spaziale sullo schermo
-*/
-void controlloNave(int *viteTotali){
-    *viteTotali = *viteTotali-1;
 
-    attron(A_BOLD);               
-    if (*viteTotali>4){
-        attron(COLOR_PAIR(3));
-    }else if (*viteTotali>=3&&*viteTotali<=4){
-        attron(COLOR_PAIR(2));
-    } else if (*viteTotali<3){
-        attron(COLOR_PAIR(1));
-    }                 
-    printLifesLeft(1,0,*viteTotali);
-    attrset(A_NORMAL) ;
-}
 
 
 /*
     gestisce la parte relativa a come appare l'alieno sullo schermo 
     e come si deve comportare lo stesso quando viene ucciso
 */
-void controlloAlieno(int fileDescriptor[], struct proprietaOggetto *alieno, struct proprietaOggetto alienoCattivo[]){
+void controlloAlieno( struct proprietaOggetto *alieno, struct proprietaOggetto alienoCattivo[]){
     int i,j;
-    if(alieno->tid==0){
-        numeroNemici = numeroNemici-1;
+    //if(alieno->tid==0){
+        //numeroNemici = numeroNemici-1;
         inizializzaPersonaggi(alieno,&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI],NUMERO_ALIENI_CATTIVI);
         aliveProcesses+= NUMERO_ALIENI_CATTIVI ;
         for ( i = 0; i < NUMERO_ALIENI_CATTIVI; i++)
@@ -396,8 +389,8 @@ void controlloAlieno(int fileDescriptor[], struct proprietaOggetto *alieno, stru
 
             numeroNemici = numeroNemici+1;
         }  
-        printEnemiesLeft(10, 0, numeroNemici);
-    }
+        //printEnemiesLeft(10, 0, numeroNemici);
+    //}
 }
 
 

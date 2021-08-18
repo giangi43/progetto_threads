@@ -1,5 +1,6 @@
 #include "header.h"
 pthread_mutex_t printMutex;
+pthread_mutex_t deleteMutex;
 
 
 /*
@@ -72,7 +73,19 @@ void resetField(int startingX, int stratingY, int endingX, int endingY){
 */
 void printLifesLeft(int startingX, int startingY, int lifesLeft){
     mutexLock(&printMutex,"stampa printLifesLeft");
+
+    attron(A_BOLD);               
+    if (lifesLeft>4){
+        attron(COLOR_PAIR(3));
+    }else if (lifesLeft>=3&&lifesLeft<=4){
+        attron(COLOR_PAIR(2));
+    } else if (lifesLeft<3){
+        attron(COLOR_PAIR(1));
+    }    
+    
     mvprintw(startingY, startingX, "vite:%d/", lifesLeft);
+    attrset(A_NORMAL) ;
+
     mutexUnlock(&printMutex,"stampa");
 }
 
@@ -119,7 +132,7 @@ void printNAliveProcesses(int startingX, int startingY, int *nProcesses){
 
 /*
     stampa un personaggio nella sua posizione
-*/
+*
 void printPropietaOggetto(struct proprietaOggetto *oggetto){    
     //printProprietaOggettoDebugLog( oggetto->segnaposto[0] == '*',oggetto);    
     char str[50];
@@ -136,11 +149,31 @@ void printPropietaOggetto(struct proprietaOggetto *oggetto){
     
     attrset(A_NORMAL);
     mutexUnlock(&printMutex,"stampa");
+}*/
+
+void printPropietaOggetto(struct proprietaOggetto *oggetto, int vite, void (*apparenze)(int)){    
+    //printProprietaOggettoDebugLog( oggetto->segnaposto[0] == '*',oggetto);    
+    char str[50];
+    strcpy(str,"stampa  printPropietaOggetto ");
+    strcat(str,oggetto->segnaposto);
+    mutexLock(&printMutex,str);
+    apparenze(vite);
+    if ( oggetto->tid!=0)
+    {
+        if (oggetto->oldX != -1 &&oggetto->oldY!=-1){
+            mutexUnlock(&printMutex,"cancello per stampa");
+            deletePropietaOggetto(oggetto);
+            mutexLock(&printMutex,"cancello per stampa");
+        }
+        mvaddnstr(oggetto->y, oggetto->x, oggetto->segnaposto,oggetto->lunghezzaSegnaposto);
+    }   
+    
+    attrset(A_NORMAL);
+    mutexUnlock(&printMutex,"stampa");
 }
 
-
-
 void deletePropietaOggetto(struct proprietaOggetto *oggetto){
+    mutexLock(&printMutex,"cancellando");
     if(/*oggetto->pid==0 &&*/ oggetto->tid==0 ){
         mvaddnstr(oggetto->y, oggetto->x, EMPTY_STRING, oggetto->lunghezzaSegnaposto);
         //printProprietaOggettoDebugLog( DEBUGGING,oggetto);
@@ -154,6 +187,7 @@ void deletePropietaOggetto(struct proprietaOggetto *oggetto){
             mvaddnstr(oggetto->oldY, oggetto->oldX, EMPTY_STRING,oggetto->lunghezzaSegnaposto);
         }
     }
+    mutexUnlock(&printMutex,"cancellando");
 }
 
 /*
@@ -298,4 +332,33 @@ int customMenu(char nomeMenu[], char voceMenu[][25], int* interazioni[], int num
 }
 
 
+void apparenzaAlieno(int vite){
+    attron(COLOR_PAIR(3));
+    if (vite>1){                     
+        attron(A_BOLD);
+    }
+}
 
+void apparenzaAlienoCattivo(int vite){
+    attron(COLOR_PAIR(1));
+    if (vite>1){                     
+        attron(A_BOLD);
+    }
+}
+
+void apparenzaNaveSpaziale(int vite){
+    attron(COLOR_PAIR(4));
+    if (vite<=1){
+        attrset(COLOR_PAIR(1));
+    }else if(vite>=3) {
+        attron(A_BOLD);
+    }
+}
+
+void apparenzaProiettile(int vite){
+   attron(COLOR_PAIR(2));
+}
+
+void apparenzaDropBomb(int vite){
+    attron(COLOR_PAIR(3));
+}

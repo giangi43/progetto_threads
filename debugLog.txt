@@ -10,7 +10,7 @@ entrato dentro controllo() 3; -> settaggio personaggi (controllo)  4;
 	tid: 0
 	flag: 0
 	vite: 6
-	X: 16
+	X: 26
 	Y: 20
 	oldX: -1
 	oldY: -1
@@ -36,68 +36,22 @@ entrato dentro naveSpaziale() 14;
 	7:^)
 	lunghezza segnaposto: 4
 	istanza: 0
-	tid: -1291843840
+	tid: 2066810624
 	flag: 0
 	vite: 6
-	X: 16
+	X: 26
 	Y: 20
 	oldX: -1
 	oldY: -1
 }
-personaggioF sta per scrivere 0
-7: 0, sta provando a scrivere
-0, ha scritto
-personaggioF ha scritto 0
+0, tread creato
+ creati alieni = 17 
+ inizializzati alieni cattivi = 18 
+settaggio personaggi (controllo) -> 19; 
 -> alienoF 0; 
 personaggioF sta per scrivere 0
-<: 0, sta provando a scrivere
-0, ha scritto
 personaggioF ha scritto 0
-0, tread creato
- creati alieni = 28 
- inizializzati alieni cattivi = 29 
-settaggio personaggi (controllo) -> 30; 
--> ciclo (controllo) 31; 
-<: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
+-> ciclo (controllo) 23; 
 *: 0, sto creando il tread
 {
 	*
@@ -106,7 +60,7 @@ settaggio personaggi (controllo) -> 30;
 	tid: 0
 	flag: 0
 	vite: 1
-	X: 13
+	X: 24
 	Y: 19
 	oldX: -1
 	oldY: -1
@@ -120,159 +74,553 @@ settaggio personaggi (controllo) -> 30;
 	tid: 0
 	flag: 0
 	vite: 1
-	X: 13
+	X: 24
 	Y: 19
 	oldX: -1
 	oldY: -1
 }
 -> proiettileSX 0; 
-*: 0, sta provando a scrivere
-0, ha scritto
--> proiettileDX 1; 
-*: 1, sta provando a scrivere
-1, ha scritto
 1, tread creato
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-killit in esecuzione 219
-killit eseguita 220
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-killit in esecuzione 266
-killit eseguita 267
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
-*: 1, sta provando a scrivere
-1, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-*: 0, sta provando a scrivere
-0, ha scritto
- !!!!!!!!
-ERRORE il proiettile * con istanza  = 1  si e eliminato da solo
-!!!!!!!!!
-<: 0, sta provando a scrivere
-0, ha scritto
+-> proiettileDX 1; 
+*: 2, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 2
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 22
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+2, tread creato
+*: 3, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 3
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 22
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 2; 
+3, tread creato
+-> proiettileDX 3; 
+o: 0, sto creando il tread
+{
+	o
+	lunghezza segnaposto: 1
+	istanza: 0
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 13
+	Y: 2
+	oldX: -1
+	oldY: -1
+}
+0, tread creato
+-> dropBombF 0; 
+qualcosa è andato storto dentro a controllo 49
+{
+	o
+	lunghezza segnaposto: 1
+	istanza: 0
+	tid: 1677657856
+	flag: 0
+	vite: 1
+	X: 13
+	Y: 2
+	oldX: -1
+	oldY: -1
+}
+killit in esecuzione 51
+killit eseguita 52
+killit in esecuzione 53
+killit eseguita 54
  !!!!!!!!
 ERRORE il proiettile * con istanza  = 0  si e eliminato da solo
 !!!!!!!!!
-<: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-<: 0, sta provando a scrivere
-0, ha scritto
-7: 0, sta provando a scrivere
-0, ha scritto
- kill Them All! < 
-killit in esecuzione 303
-killit eseguita 304
- kill Them All! 7 
-killit in esecuzione 306
-killit eseguita 307
- kill Them All! o 
- kill Them All! * 
- kill Them All! < 
-controllo ->311; 
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 1  si e eliminato da solo
+!!!!!!!!!
+killit in esecuzione 59
+killit eseguita 60
+killit in esecuzione 61
+killit eseguita 62
+killit in esecuzione 63
+killit eseguita 64
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 2  si e eliminato da solo
+!!!!!!!!!
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 3  si e eliminato da solo
+!!!!!!!!!
+*: 4, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 4
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 24
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+4, tread creato
+*: 5, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 5
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 24
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 4; 
+5, tread creato
+-> proiettileDX 5; 
+killit in esecuzione 79
+killit eseguita 80
+killit in esecuzione 81
+killit eseguita 82
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 4  si e eliminato da solo
+!!!!!!!!!
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 5  si e eliminato da solo
+!!!!!!!!!
+*: 6, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 6
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 26
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+6, tread creato
+*: 7, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 7
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 26
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 6; 
+7, tread creato
+-> proiettileDX 7; 
+*: 8, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 8
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 26
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+8, tread creato
+*: 9, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 9
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 26
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 8; 
+9, tread creato
+-> proiettileDX 9; 
+*: 10, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 10
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+10, tread creato
+*: 11, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 11
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 10; 
+11, tread creato
+-> proiettileDX 11; 
+killit in esecuzione 117
+killit eseguita 118
+killit in esecuzione 119
+killit eseguita 120
+*: 12, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 12
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+12, tread creato
+*: 13, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 13
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 12; 
+13, tread creato
+-> proiettileDX 13; 
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 6  si e eliminato da solo
+!!!!!!!!!
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 7  si e eliminato da solo
+!!!!!!!!!
+*: 14, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 14
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+14, tread creato
+*: 15, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 15
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 14; 
+15, tread creato
+-> proiettileDX 15; 
+killit in esecuzione 145
+killit eseguita 146
+killit in esecuzione 147
+killit eseguita 148
+o: 1, sto creando il tread
+{
+	o
+	lunghezza segnaposto: 1
+	istanza: 1
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 17
+	Y: 5
+	oldX: -1
+	oldY: -1
+}
+1, tread creato
+-> dropBombF 1; 
+qualcosa è andato storto dentro a controllo 154
+{
+	o
+	lunghezza segnaposto: 1
+	istanza: 1
+	tid: 1425606400
+	flag: 0
+	vite: 1
+	X: 17
+	Y: 5
+	oldX: -1
+	oldY: -1
+}
+*: 16, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 16
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+16, tread creato
+*: 17, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 17
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 16; 
+17, tread creato
+-> proiettileDX 17; 
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 8  si e eliminato da solo
+!!!!!!!!!
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 9  si e eliminato da solo
+!!!!!!!!!
+*: 18, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 18
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+18, tread creato
+*: 19, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 19
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 18; 
+19, tread creato
+-> proiettileDX 19; 
+*: 0, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 0
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+0, tread creato
+*: 1, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 1
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 0; 
+1, tread creato
+-> proiettileDX 1; 
+*: 2, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 2
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+2, tread creato
+*: 3, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 3
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 2; 
+3, tread creato
+-> proiettileDX 3; 
+*: 4, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 4
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+4, tread creato
+*: 5, sto creando il tread
+{
+	*
+	lunghezza segnaposto: 1
+	istanza: 5
+	tid: 0
+	flag: 0
+	vite: 1
+	X: 30
+	Y: 19
+	oldX: -1
+	oldY: -1
+}
+-> proiettileSX 4; 
+5, tread creato
+-> proiettileDX 5; 
+killit in esecuzione 210
+killit eseguita 211
+killit in esecuzione 212
+killit eseguita 213
+killit in esecuzione 214
+killit eseguita 215
+killit in esecuzione 216
+killit eseguita 217
+killit in esecuzione 218
+killit eseguita 219
+killit in esecuzione 220
+killit eseguita 221
+killit in esecuzione 222
+killit eseguita 223
+killit in esecuzione 224
+killit eseguita 225
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 11  si e eliminato da solo
+!!!!!!!!!
+killit in esecuzione 228
+killit eseguita 229
+killit in esecuzione 230
+killit eseguita 231
+killit in esecuzione 232
+killit eseguita 233
+killit in esecuzione 234
+killit eseguita 235
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 13  si e eliminato da solo
+!!!!!!!!!
+killit in esecuzione 238
+killit eseguita 239
+killit in esecuzione 240
+killit eseguita 241
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 15  si e eliminato da solo
+!!!!!!!!!
+killit in esecuzione 244
+killit eseguita 245
+killit in esecuzione 246
+killit eseguita 247
+killit in esecuzione 248
+killit eseguita 249
+killit in esecuzione 250
+killit eseguita 251
+killit in esecuzione 252
+killit eseguita 253
+killit in esecuzione 254
+killit eseguita 255
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 17  si e eliminato da solo
+!!!!!!!!!
+killit in esecuzione 258
+killit eseguita 259
+killit in esecuzione 260
+killit eseguita 261
+killit in esecuzione 262
+killit eseguita 263
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 19  si e eliminato da solo
+!!!!!!!!!
+killit in esecuzione 266
+killit eseguita 267
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 1  si e eliminato da solo
+!!!!!!!!!
+killit in esecuzione 270
+killit eseguita 271
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 3  si e eliminato da solo
+!!!!!!!!!
+ !!!!!!!!
+ERRORE il proiettile * con istanza  = 5  si e eliminato da solo
+!!!!!!!!!

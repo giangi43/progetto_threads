@@ -77,7 +77,8 @@ struct proprietaOggetto{
 //    pid_t pid;
     pthread_mutex_t mutex;
     pthread_t tid;         
-    char flag;    
+    char flag;
+    bool isAlive;    
     int vite;            
 } ;
 
@@ -121,6 +122,15 @@ int numeroClick;
 struct timespec deltatime;
     
 
+struct proprietaOggetto* alieno;
+struct proprietaOggetto* alienoCattivo;
+struct proprietaOggetto* naveSpaziale;
+
+struct proprietaOggetto* dropBomb;
+struct proprietaOggetto* proiettile;
+
+int istanzaProiettile;
+int istanzaDropBomb;
 
 //other
 
@@ -138,7 +148,7 @@ void *dropBombF(void* voidComm);
 //void inizializzaPersonaggi(int fileDescriptor[], struct proprietaOggetto alieno[], struct proprietaOggetto naveSpaziale[], struct proprietaOggetto dropBomb[],struct proprietaOggetto proiettile[]);
 int checkContacts(struct proprietaOggetto *personaggioA, struct proprietaOggetto arrayPersonaggiB[], int numeroPersonaggiB);
 void controlloNave(int *viteTotali);
-void controlloAlieno(int fileDescriptor[], struct proprietaOggetto *alieno, struct proprietaOggetto alienoCattivo[]);
+void controlloAlieno(struct proprietaOggetto *alieno, struct proprietaOggetto alienoCattivo[]);
 int push(struct proprietaOggetto coda[],struct proprietaOggetto *oggetto);
 struct proprietaOggetto pop(struct proprietaOggetto coda[]);
 
@@ -170,18 +180,24 @@ void buildFieldBordersFromTo(int startingX, int startingY, int endingX, int endi
 void gameOver(int x, int y); //animazione del game over
 void youWon(int x, int y); // animazione vittoria
 void resetField(int startingX, int stratingY, int endingX, int endingY); // iposta l'area come vuota
-void printPropietaOggetto(struct proprietaOggetto *oggetto);
+//void printPropietaOggetto(struct proprietaOggetto *oggetto);
+void printPropietaOggetto(struct proprietaOggetto *oggetto, int vite, void (*apparenze)(int));
 void deletePropietaOggetto(struct proprietaOggetto *oggetto);
 void printFPS(int startingX, int startingY, int *FPScounter);
 void printEnemiesLeft(int startingX, int startingY, int numeroNemici);
 int customMenu(char nomeMenu[], char voceMenu[][25], int *interazioni[], int numeroVoci);
 void printNAliveProcesses(int startingX, int startingY, int *nProcesses);
+void apparenzaAlieno(int vite);
+void apparenzaAlienoCattivo(int vite);
+void apparenzaNaveSpaziale(int vite);
+void apparenzaProiettile(int vite);
+void apparenzaDropBomb(int vite);
 
 // entita gioco
 void setPersonaggio (struct proprietaOggetto *proprieta_personaggio, char characterPlaceHolder[], int startingX, int startingY, pid_t pidToAssign, int viteIniziali, int istanza); // imposta i valori iniziali del personaggio
 void copyPersonaggio (struct proprietaOggetto *copiante,struct proprietaOggetto *copiato);
 void inizializzaPersonaggi(struct proprietaOggetto *daCopiare, struct proprietaOggetto Personaggio[], int numeroPersonaggi);
-void personaggioF (struct proprietaOggetto *pos_personaggio, int isAutonomus, char (*spostamento)(struct proprietaOggetto*,bool)); // gestisce il personaggio
+//void personaggioF (struct proprietaOggetto *pos_personaggio, int isAutonomus, char (*spostamento)(struct proprietaOggetto*,bool)); // gestisce il personaggio
 void createRandomLocation(struct proprietaOggetto *el); //assegna ad una struttura proprietaOggetto una posizione casuale
 bool isSameLocation(struct proprietaOggetto *elA, struct proprietaOggetto *elB); // valuta se 2 strutture proprietaOggetto hanno la stessa posizione
 bool isSameLocationArray(struct proprietaOggetto *elA, struct proprietaOggetto elB[], int arrayLenght);

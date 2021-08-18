@@ -35,8 +35,8 @@ void mutexUnlock(pthread_mutex_t *m, char nomeMutex[]){
 }
 
 void scrivi (struct proprietaOggetto *personaggio){
-    printStringCharDebugLog(DEBUGGING,"%c: ",&personaggio->segnaposto[0]);
-    printStringIntDebugLog(DEBUGGING, "%d, sta provando a scrivere\n",&personaggio->istanza);
+    //printStringCharDebugLog(DEBUGGING,"%c: ",&personaggio->segnaposto[0]);
+    //printStringIntDebugLog(DEBUGGING, "%d, sta provando a scrivere\n",&personaggio->istanza);
         char str[20];
         strcpy(str,"scrittura ");
         strcat(str, personaggio->segnaposto);
@@ -44,7 +44,7 @@ void scrivi (struct proprietaOggetto *personaggio){
         push(codaProprieta,personaggio);
         mutexUnlock(&lock,"scrittura");
     
-    printStringIntDebugLog(DEBUGGING, "%d, ha scritto\n",&personaggio->istanza);
+    //printStringIntDebugLog(DEBUGGING, "%d, ha scritto\n",&personaggio->istanza);
 }
 
 void leggi ( struct proprietaOggetto *valore_letto){
@@ -128,14 +128,15 @@ void killIt(struct proprietaOggetto *personaggio){
     //printStringIntDebugLog(personaggio->pid==0&&personaggio->oldX!=-1," !!!!!!!!\nkillit pid = 0 per istanza = %d \n!!!!!!!!!\n", &(personaggio->istanza));
 
     if (personaggio->tid!=0){
+        personaggio->isAlive=false;
         deletePropietaOggetto(personaggio);
         //kill(personaggio->pid,1);
         printStringIntDebugLog(DEBUGGING,"killit in esecuzione %d\n",&debugIndex);
         //fflush(NULL);
-        //pthread_join(personaggio->tid,NULL);
-        personaggio->flag='k';
-        printStringIntDebugLog(DEBUGGING_NEEDED,"killit eseguita %d\n",&debugIndex);
         
+        
+        printStringIntDebugLog(DEBUGGING_NEEDED,"killit eseguita %d\n",&debugIndex);
+        pthread_join(personaggio->tid,NULL);
         personaggio->tid = 0;  
         deletePropietaOggetto(personaggio); 
         aliveProcesses--;
@@ -151,26 +152,26 @@ int checkContacts(struct proprietaOggetto *personaggioA, struct proprietaOggetto
     index = indexOfWhoIsSameLocationArray(personaggioA,arrayPersonaggiB, numeroPersonaggiB);    
     if(index >=0){ 
         
-        mutexLock(&lifes,"vite");
+        //mutexLock(&lifes,"vite");
          
         personaggioA->vite--;
         
         if (personaggioA->vite<=0){            
-            mutexUnlock(&lifes,"vite");
+            //mutexUnlock(&lifes,"vite");
             killIt(personaggioA);
         }
         
-        mutexUnlock(&lifes,"vite");
-        mutexLock(&lifes,"vite");
+        //mutexUnlock(&lifes,"vite");
+        //mutexLock(&lifes,"vite");
         
         arrayPersonaggiB[index].vite--;
          
         if (arrayPersonaggiB[index].vite<=0){
-            mutexUnlock(&lifes,"vite");
+           // mutexUnlock(&lifes,"vite");
             killIt(&arrayPersonaggiB[index]);
         }
 
-        mutexUnlock(&lifes,"vite");
+        //mutexUnlock(&lifes,"vite");
         return index;
     }    
     return index;
