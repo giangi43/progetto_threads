@@ -14,8 +14,8 @@ void setPersonaggio (struct proprietaOggetto *proprieta_personaggio, char charac
     //proprieta_personaggio->pid = pidToAssign;          
     proprieta_personaggio->flag = EMPTY;    
     proprieta_personaggio->vite = viteIniziali; 
-    proprieta_personaggio->tid=0;
-    proprieta_personaggio->isAlive=true;
+    proprieta_personaggio->tid = 0;
+    proprieta_personaggio->isAlive = true;
 }
 
 
@@ -44,64 +44,7 @@ void inizializzaPersonaggi(struct proprietaOggetto *daCopiare, struct proprietaO
     }
 }
 
-/*void personaggioF (struct proprietaOggetto *proprieta_personaggio, int isAutonomus, char (*spostamento)(struct proprietaOggetto*,bool)){    
-    int bombDrop = customRandom(10,30);
-    int counter =0;
 
-    waitTOJumpIn(proprieta_personaggio);
-    
-    printStringIntDebugLog(DEBUGGING,"personaggioF sta per scrivere %d\n", &proprieta_personaggio->istanza);
-    fflush(NULL);
-    scrivi(proprieta_personaggio);  
-    
-    printStringIntDebugLog(DEBUGGING,"personaggioF ha scritto %d\n", &proprieta_personaggio->istanza);
-    fflush(NULL);  
-
-    while(proprieta_personaggio->flag!='k') {
-        counter++;
-        if(counter==100){
-            counter=0;
-            printStringCharDebugLog(DEBUGGING,"personaggio %c ",&proprieta_personaggio->segnaposto[0]);
-            printStringIntDebugLog(DEBUGGING,"con istanza %d: e ancora vivo\n",&proprieta_personaggio->istanza);
-        }        
-        if(isAutonomus){
-            napms(VELOCITA_PERSONAGGI);
-            //mutexLock(&proprieta_personaggio->mutex,proprieta_personaggio->segnaposto);
-            spostamento(proprieta_personaggio, false);                      
-            if (bombDrop==0)
-            {
-                proprieta_personaggio->flag=BLANK_SPACE;
-                bombDrop = customRandom(30,90);
-            }
-            bombDrop--;
-        }
-        else{
-            numeroGiriCiclo++;
-            //printStringIntDebugLog(true,"giro :%d\n",&numeroGiriCiclo);
-            napms(VELOCITA_PERSONAGGI/10);
-            spostamento(proprieta_personaggio, false);
-        }
-        printStringCharDebugLog(DEBUGGING2, "personaggio flag:%c; \n", &(proprieta_personaggio->flag));
-        printStringIntDebugLog(DEBUGGING2, "personaggio istanza:%d; \n", &(proprieta_personaggio->istanza));
-        if(proprieta_personaggio->y>=getYfieldSize()-2||proprieta_personaggio->y<=0){
-           printStringIntDebugLog(DEBUGGING," !!!!!!!!\nERRORE il personaggio con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &proprieta_personaggio->istanza);
-           printPropietaOggetto(proprieta_personaggio);
-           proprieta_personaggio->flag=LOST;
-           scrivi(proprieta_personaggio);           
-        }
-
-        
-        //mutexLock(&lifes,"vite");
-        if (proprieta_personaggio->vite<=0){
-            //mutexUnlock(&lifes,"vite");
-            break;
-        }
-        //mutexUnlock(&lifes,"vite");
-        
-        mutexUnlock(&proprieta_personaggio->mutex,proprieta_personaggio->segnaposto);
-        scrivi(proprieta_personaggio); 
-    }
-}*/
 
 void waitTOJumpIn(struct proprietaOggetto *proprieta_personaggio){
     int whaitingCount =0;
@@ -134,8 +77,12 @@ char spostamentoAPassi (struct proprietaOggetto *personaggio, bool isRandom){
 char spostamentoAPassiLaterali (struct proprietaOggetto *personaggio, bool isRandom){
     char c = 'n';
     if (isRandom){
-        c = customRandom(DESTRA, SINISTRA);
+        napms(VELOCITA_PERSONAGGI);
+        c = customRandom(DESTRA, SINISTRA);        
         passo(personaggio,c);
+        if (customRandom(0,5)==0){
+            personaggio->flag=BLANK_SPACE;
+        }
     }
     else{
         c=getch();
@@ -305,48 +252,7 @@ void updateProprietaOggetto(struct proprietaOggetto *daSovrascrivere, struct pro
 }
 
 
-void proiettileF ( struct proprietaOggetto *proprieta_proiettile, char (*spostamento)(struct proprietaOggetto*)){    
-    int counter =0;
-    printStringIntDebugLog(DEBUGGING2,"-> proiettileF %d \n", &debugIndex);
-    scrivi(proprieta_proiettile);
-    while(proprieta_proiettile->flag!='k') {
-        counter++;
 
-        for (int i = 0; i < 1000000; i++)
-        {
-            {int i = 5+5;}
-        }
-        
-        if(counter==100){
-            counter=0;
-            printStringCharDebugLog(DEBUGGING,"personaggio %c ",&proprieta_proiettile->segnaposto[0]);
-            printStringIntDebugLog(DEBUGGING,"con istanza %d: e ancora vivo\n",&proprieta_proiettile->istanza);
-        }
-
-        spostamento(proprieta_proiettile);
-        napms(VELOCITA_PROIETTILI);
-        
-       printStringIntDebugLog(DEBUGGING2, "proiettile istanza:%d; \n", &(proprieta_proiettile->istanza));
-       if(proprieta_proiettile->y>=getYfieldSize()||proprieta_proiettile->y<0){
-            printStringCharDebugLog(DEBUGGING," !!!!!!!!\nERRORE il proiettile %c", &proprieta_proiettile->segnaposto[0]);
-            printStringIntDebugLog(DEBUGGING," con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &proprieta_proiettile->istanza);
-            //proprieta_proiettile->flag=LOST;
-            break;
-        }
-        
-        // mutexLock(&lifes,"vite");
-        // if (proprieta_proiettile->vite<=0){
-        //     scrivi(proprieta_proiettile);
-        //     break;
-        // }
-        // mutexUnlock(&lifes,"vite");
-        
-        scrivi(proprieta_proiettile);
-        //stampo
-        // attron(COLOR_PAIR(2));
-        printPropietaOggetto(proprieta_proiettile,proprieta_proiettile->vite,apparenzaProiettile);
-    }
-}
 
 char spostamentoProiettileSX (struct proprietaOggetto *proiettile){
     char c = passo(proiettile,SINISTRA);
@@ -367,7 +273,7 @@ char spostamentoDropBomb (struct proprietaOggetto *proiettile){
 
 
 void spara(struct proprietaOggetto proiettile[], struct proprietaOggetto *valore_letto, int fileDescriptor[],int istanzaProiettile){
-    aliveProcesses+=2;
+    
     killIt(&proiettile[istanzaProiettile]);
     killIt(&proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI]);
 
@@ -376,6 +282,8 @@ void spara(struct proprietaOggetto proiettile[], struct proprietaOggetto *valore
 
     myThreadCreate(&(proiettile[istanzaProiettile]),proiettileSX);
     myThreadCreate(&(proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI]),proiettileDX);
+    
+    istanzaProiettile = (istanzaProiettile+2)%NUMERO_MAX_PROIETTILI;
 }
 
 
@@ -389,7 +297,7 @@ void *proiettileSX(void* voidPersonaggio){
     printStringIntDebugLog(DEBUGGING2,"-> proiettileF %d \n", &debugIndex);
     //scrivi(personaggio);
 
-    while(personaggio->flag!='k') {
+    while(personaggio->isAlive) {
         counter++;
 
         for (int i = 0; i < 1000000; i++)
@@ -399,7 +307,7 @@ void *proiettileSX(void* voidPersonaggio){
         
         if(counter==100){
             counter=0;
-            printStringCharDebugLog(DEBUGGING,"personaggio %c ",&personaggio->segnaposto[0]);
+            printStringCharDebugLog(DEBUGGING_NEEDED,"personaggio %c ",&personaggio->segnaposto[0]);
             printStringIntDebugLog(DEBUGGING,"con istanza %d: e ancora vivo\n",&personaggio->istanza);
         }
 
@@ -411,33 +319,18 @@ void *proiettileSX(void* voidPersonaggio){
             printStringCharDebugLog(DEBUGGING," !!!!!!!!\nERRORE il proiettile %c", &personaggio->segnaposto[0]);
             printStringIntDebugLog(DEBUGGING," con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &personaggio->istanza);
             //personaggio->flag=LOST;
+            killIt(personaggio);
             break;
         }
         
-        // mutexLock(&lifes,"vite");
-        // if (personaggio->vite<=0){
-        //     scrivi(personaggio);
-        //     break;
-        // }
-        // mutexUnlock(&lifes,"vite");
-        
-        //scrivi(personaggio);
-        //stampo
-        // attron(COLOR_PAIR(2));
         //aggiorno
         if (isOutOfBound(personaggio)){
             killIt(personaggio);
-        }else/* if (proiettile[valore_letto.istanza].pid!=0)*/{
+        }else{
 
             //controllo contatti e agisco di conseguenza
             index = checkContacts(personaggio,alienoCattivo,NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI);
-            if (0<=index){
-                if (alienoCattivo[index].vite<=0)
-                {
-                    numeroNemici = numeroNemici-1;
-                    printEnemiesLeft(10, 0, numeroNemici);
-                }  
-            }
+            
             //controllo contatti e agisco di conseguenza
             index = checkContacts(personaggio,alieno,NUMERO_ALIENI);
             if(0<=index){
@@ -461,7 +354,7 @@ void *proiettileDX(void* voidPersonaggio){
     printStringIntDebugLog(DEBUGGING2,"-> proiettileF %d \n", &debugIndex);
     //scrivi(personaggio);
 
-    while(personaggio->flag!='k') {
+    while(personaggio->isAlive) {
         counter++;
 
         for (int i = 0; i < 1000000; i++)
@@ -471,7 +364,7 @@ void *proiettileDX(void* voidPersonaggio){
         
         if(counter==100){
             counter=0;
-            printStringCharDebugLog(DEBUGGING,"personaggio %c ",&personaggio->segnaposto[0]);
+            printStringCharDebugLog(DEBUGGING_NEEDED,"personaggio %c ",&personaggio->segnaposto[0]);
             printStringIntDebugLog(DEBUGGING,"con istanza %d: e ancora vivo\n",&personaggio->istanza);
         }
 
@@ -486,16 +379,6 @@ void *proiettileDX(void* voidPersonaggio){
             break;
         }
         
-        // mutexLock(&lifes,"vite");
-        // if (personaggio->vite<=0){
-        //     scrivi(personaggio);
-        //     break;
-        // }
-        // mutexUnlock(&lifes,"vite");
-        
-        //scrivi(personaggio);
-        //stampo
-        // attron(COLOR_PAIR(2));
         //aggiorno
         if (isOutOfBound(personaggio)){
             killIt(personaggio);
@@ -503,19 +386,23 @@ void *proiettileDX(void* voidPersonaggio){
 
             //controllo contatti e agisco di conseguenza
             index = checkContacts(personaggio,alienoCattivo,NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI);
-            if (0<=index){
-                if (alienoCattivo[index].vite<=0)
-                {
-                    numeroNemici = numeroNemici-1;
-                    printEnemiesLeft(10, 0, numeroNemici);
-                }  
-            }
+            
             //controllo contatti e agisco di conseguenza
             index = checkContacts(personaggio,alieno,NUMERO_ALIENI);
             if(0<=index){
                 controlloAlieno(&alieno[index], alienoCattivo);
             }
-
+            //mutexLock(&lifes,"vite");
+        if (personaggio->vite<=0){
+            //mutexUnlock(&lifes,"vite");
+            scrivi(personaggio);
+            mutexLock(&printMutex,"cancello perche morto");
+            deletePropietaOggetto(personaggio);
+            mutexUnlock(&printMutex,"cancello perche morto");
+            break;
+        }
+        
+        //mutexUnlock(&lifes,"vite");
 
             printPropietaOggetto(personaggio,personaggio->vite,apparenzaProiettile);
         }
@@ -542,10 +429,10 @@ void *dropBombF(void* voidPersonaggio){
         
         if(counter==100){
             counter=0;
-            printStringCharDebugLog(DEBUGGING,"personaggio %c ",&personaggio->segnaposto[0]);
+            printStringCharDebugLog(DEBUGGING_NEEDED,"personaggio %c ",&personaggio->segnaposto[0]);
             printStringIntDebugLog(DEBUGGING,"con istanza %d: e ancora vivo\n",&personaggio->istanza);
         }
-
+        
         spostamentoDropBomb(personaggio);
         napms(VELOCITA_PROIETTILI);
         
@@ -557,27 +444,31 @@ void *dropBombF(void* voidPersonaggio){
             break;
         }
         
-        mutexLock(&lifes,"vite");
+        //mutexLock(&lifes,"vite");
         if (personaggio->vite<=0){
-            mutexUnlock(&lifes,"vite");
+            //mutexUnlock(&lifes,"vite");
             scrivi(personaggio);
-            deletePropietaOggetto(personaggio);
+            mutexLock(&printMutex,"cancello perche morto");
+            killIt(personaggio);
+            mutexUnlock(&printMutex,"cancello perche morto");
             break;
         }
-        mutexUnlock(&lifes,"vite");
+        //mutexUnlock(&lifes,"vite");
 
         //scrivi(personaggio);
         //stampo
         //attron(COLOR_PAIR(2));
-        if (isOutOfBound(personaggio)){
-                killIt(personaggio);
-                break;
-        }//else if (dropBomb[valore_letto.istanza].pid!=0){            
+        //else if (dropBomb[valore_letto.istanza].pid!=0){            
                 //controllo contatti e agisco di conseguenza
         index = checkContacts(personaggio,naveSpaziale,NUMERO_GIOCATORI);
         if(0<=index){
             printLifesLeft(1,0,naveSpaziale->vite);
             printStringIntDebugLog(DEBUGGING,"nave controllata drop %d\n",&personaggio->istanza);
+        }
+
+        if (isOutOfBound(personaggio)){
+                killIt(personaggio);
+                break;
         }
 
                 //stampo
@@ -599,7 +490,7 @@ void *alienoF(void* voidPersonaggio){
 
     printStringIntDebugLog(DEBUGGING2,"creato singolo alieno() %d; \n", &debugIndex);
     printStringIntDebugLog(DEBUGGING2," alieno creato con istanza = %d \n", &personaggio->istanza);
-    srand((int)(personaggio->istanza*(int)time(0)^(1/5)));
+    //srand((int)(personaggio->istanza*(int)time(0)^(1/5)));
     //personaggioF(personaggio,true,spostamentoLineare);
 
    
@@ -617,11 +508,11 @@ void *alienoF(void* voidPersonaggio){
     printStringIntDebugLog(DEBUGGING,"personaggioF ha scritto %d\n", &personaggio->istanza);
     fflush(NULL);  
 
-    while(personaggio->flag!='k'||personaggio->flag!=LOST) {
+    while(personaggio->isAlive&&personaggio->flag!=LOST) {
         counter++;
         if(counter==100){
             counter=0;
-            printStringCharDebugLog(DEBUGGING,"personaggio %c ",&personaggio->segnaposto[0]);
+            printStringCharDebugLog(DEBUGGING_NEEDED,"personaggio %c ",&personaggio->segnaposto[0]);
             printStringIntDebugLog(DEBUGGING,"con istanza %d: e ancora vivo\n",&personaggio->istanza);
         }        
         
@@ -638,32 +529,26 @@ void *alienoF(void* voidPersonaggio){
         printStringCharDebugLog(DEBUGGING2, "personaggio flag:%c; \n", &(personaggio->flag));
         printStringIntDebugLog(DEBUGGING2, "personaggio istanza:%d; \n", &(personaggio->istanza));
         if(personaggio->y>=getYfieldSize()-2||personaggio->y<=0){
-           printStringIntDebugLog(DEBUGGING," !!!!!!!!\nERRORE il personaggio con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &personaggio->istanza);
-            if(personaggio->segnaposto[0]==SEGNAPOSTO_ALIENO[0]){
-                printPropietaOggetto(personaggio,personaggio->vite,apparenzaAlieno); 
-            }else{
-                printPropietaOggetto(personaggio,personaggio->vite,apparenzaAlienoCattivo); 
-            }           personaggio->flag=LOST;
-           scrivi(personaggio);           
+           printStringIntDebugLog(DEBUGGING," !!!!!!!!\nERRORE il personaggio con istanza  = %d  si e eliminato da solo\n!!!!!!!!!\n", &personaggio->istanza);          
+            personaggio->flag=LOST;
+            scrivi(personaggio);           
         }
 
             
         //controllo contatti e agisco di conseguenza
-        mutexLock(&lifes,"vite");
+        //mutexLock(&lifes,"vite");
         if(0<=checkContacts(personaggio,proiettile,NUMERO_MAX_PROIETTILI)){
             if (personaggio->vite<=0)
             {
                 if(personaggio->segnaposto[0]==SEGNAPOSTO_ALIENO[0]){
                     controlloAlieno(personaggio, alienoCattivo);
                 }
-                numeroNemici = numeroNemici-1;
-                printEnemiesLeft(10, 0, numeroNemici);
                 personaggio->flag=='k';
-                mutexUnlock(&lifes,"vite");
+                //mutexUnlock(&lifes,"vite");
                 break;
             }              
         }
-        mutexUnlock(&lifes,"vite");
+        //mutexUnlock(&lifes,"vite");
            
         //controllo spari e agisco
         if (personaggio->flag==BLANK_SPACE)
@@ -671,14 +556,10 @@ void *alienoF(void* voidPersonaggio){
             killIt(&dropBomb[istanzaDropBomb]);
             setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,personaggio->x,personaggio->y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
             myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
-            aliveProcesses++;
+            //aliveProcesses++;
             istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
         }
         //stampo
-        attron(COLOR_PAIR(3));
-        if (personaggio->vite>1){                     
-            attron(A_BOLD);
-        }
         if(personaggio->segnaposto[0]==SEGNAPOSTO_ALIENO[0]){
             printPropietaOggetto(personaggio,personaggio->vite,apparenzaAlieno); 
         }else{
@@ -686,12 +567,17 @@ void *alienoF(void* voidPersonaggio){
         }
                
     }
+    numeroNemici--;
+    printEnemiesLeft(10, 0, numeroNemici);
 }
 
 
 
 void *naveSpazialeF(void* voidPersonaggio){
+    int counter=0;
     struct proprietaOggetto* personaggio = (struct proprietaOggetto*) voidPersonaggio;
+    //srand((int)(personaggio->istanza*(int)time(0)^(1/5)));
+    
     printStringIntDebugLog(DEBUGGING_NEEDED,"-> naveSpazialeF %d; \n", &personaggio->istanza);
 
     printStringIntDebugLog(DEBUGGING,"entrato dentro naveSpaziale() %d; \n", &debugIndex);
@@ -700,14 +586,21 @@ void *naveSpazialeF(void* voidPersonaggio){
     //personaggioF(personaggio,false,spostamentoAPassiLaterali);   
     
     //scrivi(personaggio);
-    printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale); 
+    //printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale); 
 
-    while(personaggio->flag!='k') {               
+    while(personaggio->isAlive) {               
         
         numeroGiriCiclo++;
         //printStringIntDebugLog(true,"giro :%d\n",&numeroGiriCiclo);
         napms(VELOCITA_PERSONAGGI/10);
-        spostamentoAPassiLaterali(personaggio, false);
+        printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale);
+        spostamentoAPassiLaterali(personaggio, true);
+        counter++;
+        if(counter==100){
+            counter=0;
+            printStringCharDebugLog(DEBUGGING_NEEDED,"personaggio %c ",&personaggio->segnaposto[0]);
+            printStringIntDebugLog(DEBUGGING,"con istanza %d: e ancora vivo\n",&personaggio->istanza);
+        } 
         
         printStringCharDebugLog(DEBUGGING2, "personaggio flag:%c; \n", &(personaggio->flag));
         printStringIntDebugLog(DEBUGGING2, "personaggio istanza:%d; \n", &(personaggio->istanza));
@@ -724,9 +617,9 @@ void *naveSpazialeF(void* voidPersonaggio){
             break;
         }
         
-        mutexLock(&lifes,"vite");
+        //mutexLock(&lifes,"vite");
         if (personaggio->vite<=0){
-            mutexUnlock(&lifes,"vite");
+            //mutexUnlock(&lifes,"vite");
             personaggio->flag=LOST;
             scrivi(personaggio);
             break;
@@ -738,22 +631,15 @@ void *naveSpazialeF(void* voidPersonaggio){
             printStringIntDebugLog(DEBUGGING,"nave controllata nave %d\n",&personaggio->istanza);
 
         }
-        mutexUnlock(&lifes,"vite");
+        //mutexUnlock(&lifes,"vite");
 
         //controllo spari e agisco
         if (personaggio->flag==BLANK_SPACE)
         {
-            spara(proiettile, personaggio,NULL,istanzaProiettile);
-            istanzaProiettile = (istanzaProiettile+2)%NUMERO_MAX_PROIETTILI;                   
+            spara(proiettile, personaggio,NULL,istanzaProiettile);                               
         }               
         
         //stampo
-        // attron(COLOR_PAIR(4));
-        // if (personaggio->vite<=1){
-        //     attrset(COLOR_PAIR(1));
-        // }else if(personaggio->vite>=3) {
-        //     attron(A_BOLD);
-        // }
         printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale); 
     }
 }

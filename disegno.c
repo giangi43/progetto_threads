@@ -1,5 +1,5 @@
 #include "header.h"
-pthread_mutex_t printMutex;
+
 pthread_mutex_t deleteMutex;
 
 
@@ -35,6 +35,7 @@ int getYfieldSize(){
 */
 void buildFieldBorders(int endingX, int endingY){
     buildFieldBordersFromTo(0,0,endingX,endingY);
+    
 }
 
 /*
@@ -42,6 +43,9 @@ void buildFieldBorders(int endingX, int endingY){
     partendo e terminando a cordinate a scelta 
 */
 void buildFieldBordersFromTo(int startingX, int startingY, int endingX, int endingY){
+    mutexLock(&printMutex,"stampa buildFieldBordersFromTo");
+    attrset(A_NORMAL);
+    attron(A_BOLD);
     int i,j;
     for ( i = startingX; i < endingX; i++){
         for ( j = startingY; j < endingY; j++)
@@ -51,20 +55,29 @@ void buildFieldBordersFromTo(int startingX, int startingY, int endingX, int endi
                 //usleep(1);
             }
         }        
-    } 
+    }
+    refresh(); 
+    attrset(A_NORMAL);
+    mutexUnlock(&printMutex,"stampa buildFieldBordersFromTo");
+
 }
 
 /*
     pulisce completamente lo schermo
 */
 void resetField(int startingX, int stratingY, int endingX, int endingY){
+    mutexLock(&printMutex,"stampa resetField");
+
+    //attrset(A_NORMAL);
     int i,j;
     for ( i = startingX; i < endingX; i++){
         for ( j = stratingY; j < endingY; j++)
         {
             mvaddch(j,i,' ');
         }        
-    } 
+    }
+    refresh(); 
+    mutexUnlock(&printMutex,"stampa resetField");
 }
 
 /*
@@ -85,8 +98,8 @@ void printLifesLeft(int startingX, int startingY, int lifesLeft){
     
     mvprintw(startingY, startingX, "vite:%d/", lifesLeft);
     attrset(A_NORMAL) ;
-
-    mutexUnlock(&printMutex,"stampa");
+    refresh();
+    mutexUnlock(&printMutex,"stampa printLifesLeft");
 }
 
 /*
@@ -96,7 +109,8 @@ void printLifesLeft(int startingX, int startingY, int lifesLeft){
 void printEnemiesLeft(int startingX, int startingY, int numeroNemici){
     mutexLock(&printMutex,"stampa printEnemiesLeft");
     mvprintw(startingY, startingX, "nemici:%d//", numeroNemici);
-    mutexUnlock(&printMutex,"stampa"); 
+    refresh();
+    mutexUnlock(&printMutex,"stampa printEnemiesLeft"); 
 }
 
 /*
@@ -112,7 +126,7 @@ void printFPS(int startingX, int startingY, int *FPScounter){
     if (msec > trigger){
         mutexLock(&printMutex,"stampa printFPS");
         mvprintw(startingY, startingX, "fps:%d//", *FPScounter);
-        mutexUnlock(&printMutex,"stampa");
+        mutexUnlock(&printMutex,"stampa printFPS");
         *FPScounter=0;
         clockStart = clock();
     } 
@@ -127,53 +141,37 @@ void printFPS(int startingX, int startingY, int *FPScounter){
 void printNAliveProcesses(int startingX, int startingY, int *nProcesses){ 
     mutexLock(&printMutex,"stampa printNAliveProcesses");   
     mvprintw(startingY, startingX, "processes:%d//", *nProcesses);
-    mutexUnlock(&printMutex,"stampa");
+    refresh();
+    mutexUnlock(&printMutex,"stampa printNAliveProcesses");
 }
 
 /*
     stampa un personaggio nella sua posizione
-*
-void printPropietaOggetto(struct proprietaOggetto *oggetto){    
-    //printProprietaOggettoDebugLog( oggetto->segnaposto[0] == '*',oggetto);    
-    char str[50];
-    strcpy(str,"stampa  printPropietaOggetto ");
-    strcat(str,oggetto->segnaposto);
-    mutexLock(&printMutex,str);
-    if ( oggetto->tid!=0)
-    {
-        if (oggetto->oldX != -1 &&oggetto->oldY!=-1){
-            deletePropietaOggetto(oggetto);
-        }
-        mvaddnstr(oggetto->y, oggetto->x, oggetto->segnaposto,oggetto->lunghezzaSegnaposto);
-    }   
-    
-    attrset(A_NORMAL);
-    mutexUnlock(&printMutex,"stampa");
-}*/
-
+*/
 void printPropietaOggetto(struct proprietaOggetto *oggetto, int vite, void (*apparenze)(int)){    
     //printProprietaOggettoDebugLog( oggetto->segnaposto[0] == '*',oggetto);    
     char str[50];
     strcpy(str,"stampa  printPropietaOggetto ");
     strcat(str,oggetto->segnaposto);
-    mutexLock(&printMutex,str);
-    apparenze(vite);
+    mutexLock(&printMutex,str);    
     if ( oggetto->tid!=0)
     {
         if (oggetto->oldX != -1 &&oggetto->oldY!=-1){
-            mutexUnlock(&printMutex,"cancello per stampa");
+            //mutexUnlock(&printMutex,"cancello per stampa");
             deletePropietaOggetto(oggetto);
-            mutexLock(&printMutex,"cancello per stampa");
+            //mutexLock(&printMutex,"cancello per stampa");
+            refresh();
         }
+        apparenze(vite);
         mvaddnstr(oggetto->y, oggetto->x, oggetto->segnaposto,oggetto->lunghezzaSegnaposto);
     }   
-    
+    refresh();
     attrset(A_NORMAL);
-    mutexUnlock(&printMutex,"stampa");
+    mutexUnlock(&printMutex,"stampa printPropietaOggetto");
 }
 
 void deletePropietaOggetto(struct proprietaOggetto *oggetto){
-    mutexLock(&printMutex,"cancellando");
+    //mutexLock(&printMutex,"cancellando");
     if(/*oggetto->pid==0 &&*/ oggetto->tid==0 ){
         mvaddnstr(oggetto->y, oggetto->x, EMPTY_STRING, oggetto->lunghezzaSegnaposto);
         //printProprietaOggettoDebugLog( DEBUGGING,oggetto);
@@ -187,7 +185,8 @@ void deletePropietaOggetto(struct proprietaOggetto *oggetto){
             mvaddnstr(oggetto->oldY, oggetto->oldX, EMPTY_STRING,oggetto->lunghezzaSegnaposto);
         }
     }
-    mutexUnlock(&printMutex,"cancellando");
+    refresh();
+    //mutexUnlock(&printMutex,"cancellando");
 }
 
 /*

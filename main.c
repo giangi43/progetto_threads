@@ -3,6 +3,7 @@
 int main(){
     numeroGiriCiclo=0;
     numeroClick=0;
+    
 
     deltatime.tv_sec=0;
     deltatime.tv_nsec=100000;
@@ -58,7 +59,7 @@ int main(){
                             &IS_WITH_THREAD};
 
     //printf("%d",*interazioni[0]);
-
+    srand((int)((int)time(0)^(1/5)));
     
     
     createDebugLog(true);
@@ -124,19 +125,28 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
     int i =0, j=0, index =0;
     //printStringIntDebugLog(DEBUGGING," pipeout = %d \n",&fileDescriptor[1]);
 
+    resetField(0, 0, getXfieldSize(), getYfieldSize());
+    
+    buildFieldBorders(getXfieldSize(), getYfieldSize()-1);
+
+    printLifesLeft(1,0,VITE_NAVE);
+    //printFPS(1, getXfieldSize()-7, &FPScounter);
+    printEnemiesLeft(10, 0, numeroNemici);
+    curs_set(0);
+
     printStringIntDebugLog(DEBUGGING_NEEDED,"-> settaggio personaggi (controllo)  %d; \n", &debugIndex);
 
     setPersonaggio(&valore_letto,SEGNAPOSTO_NAVE,getXfieldSize()/2,getYfieldSize()-3,0,VITE_NAVE,0);
     inizializzaPersonaggi(&valore_letto,naveSpaziale,NUMERO_GIOCATORI);
     creaGruppoPersonaggi(naveSpaziale, naveSpazialeF, NUMERO_GIOCATORI);
-    aliveProcesses+= NUMERO_GIOCATORI ;
+    //aliveProcesses+= NUMERO_GIOCATORI ;
 
     printStringIntDebugLog(DEBUGGING," creata nave %d \n", &debugIndex);
 
     setPersonaggio(&valore_letto,SEGNAPOSTO_ALIENO,1,1,0,VITE_ALIENI,0);
     inizializzaPersonaggi(&valore_letto,alieno,NUMERO_ALIENI);
     creaGruppoPersonaggi(alieno, alienoF, NUMERO_ALIENI);
-    aliveProcesses+= NUMERO_ALIENI ;
+    //aliveProcesses+= NUMERO_ALIENI ;
 
     printStringIntDebugLog(DEBUGGING," creati alieni = %d \n",&debugIndex);
     fflush(NULL);
@@ -155,15 +165,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
     inizializzaPersonaggi(&valore_letto,dropBomb,NUMERO_MAX_PROIETTILI);
     printStringIntDebugLog(DEBUGGING_NEEDED,"settaggio personaggi (controllo) -> %d; \n", &debugIndex);
     
-    resetField(0, 0, getXfieldSize(), getYfieldSize());
-    attron(A_BOLD);
-    buildFieldBorders(getXfieldSize(), getYfieldSize()-1);
-    attrset(A_NORMAL);
-    attron(A_BOLD);
-    printLifesLeft(1,0,naveSpaziale[0].vite);
-    //printFPS(1, getXfieldSize()-7, &FPScounter);
-    printEnemiesLeft(10, 0, numeroNemici);
-    curs_set(0);    
+        
     refresh();
 
     printStringIntDebugLog(DEBUGGING_NEEDED,"-> ciclo (controllo) %d; \n", &debugIndex);
@@ -176,154 +178,14 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
         leggi (&valore_letto);
         if(valore_letto.flag!='v'){
             //mutexLock(&valore_letto.mutex, valore_letto.segnaposto);
-            printStringIntDebugLog(DEBUGGING2,"inizio %d\n", &debugIndex);
-            printProprietaOggettoDebugLog(DEBUGGING2, &valore_letto);
+            printStringIntDebugLog(DEBUGGING,"inizio %d\n", &debugIndex);
+            printProprietaOggettoDebugLog(DEBUGGING, &valore_letto);
             //fflush(NULL);
         }
         if(valore_letto.flag==LOST){
             break;
         }
         
-        /*
-            gestisco il caso della nave
-        
-        if (SEGNAPOSTO_NAVE[0]==valore_letto.segnaposto[0]){
-            //aggiorno
-            updateProprietaOggetto(&naveSpaziale[valore_letto.istanza],&valore_letto);
-
-            //controlllo contatti e agisco di conseguenza
-            if(0<=checkContacts(&naveSpaziale[valore_letto.istanza],dropBomb,NUMERO_MAX_PROIETTILI)){
-                controlloNave(&viteTotali);
-                printStringIntDebugLog(DEBUGGING,"nave controllata nave %d\n",&valore_letto.istanza);
-
-            }
-
-            //controllo spari e agisco
-            if (valore_letto.flag==BLANK_SPACE)
-            {
-                spara(proiettile, &valore_letto,NULL,istanzaProiettile);
-                istanzaProiettile = (istanzaProiettile+2)%NUMERO_MAX_PROIETTILI;                   
-            }               
-            
-            //stampo
-            attron(COLOR_PAIR(4));
-            if (naveSpaziale[valore_letto.istanza].vite<=1){
-                attrset(COLOR_PAIR(1));
-            }else if(naveSpaziale[valore_letto.istanza].vite>=3) {
-                attron(A_BOLD);
-            }
-            printPropietaOggetto(&naveSpaziale[valore_letto.istanza]);
-
-        }
-        /*
-            gestisco il caso dell' alieno
-                    
-        else if (SEGNAPOSTO_ALIENO[0]==valore_letto.segnaposto[0]){
-            //aggiorno
-            updateProprietaOggetto(&alieno[valore_letto.istanza],&valore_letto);
-            //controlllo contatti e agisco di conseguenza
-            if(0<=checkContacts(&alieno[valore_letto.istanza],proiettile,NUMERO_MAX_PROIETTILI)){
-                controlloAlieno(NULL,&alieno[valore_letto.istanza], alienoCattivo);
-            }
-            //controllo spari e agisco
-            if (valore_letto.flag==BLANK_SPACE)
-            {                   
-                killIt(&dropBomb[istanzaDropBomb]);
-                setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,valore_letto.x,valore_letto.y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
-                //myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
-                aliveProcesses++;
-                istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
-            }
-            //stampo
-            attron(COLOR_PAIR(3));
-            if (alieno[valore_letto.istanza].vite>1){                     
-                attron(A_BOLD);
-            }
-            printPropietaOggetto(&alieno[valore_letto.istanza]);
-        }
-        
-        /*
-            gestisco il caso dell' alieno CATTIVO
-        
-        else if (SEGNAPOSTO_ALIENO_CATTIVO[0]==valore_letto.segnaposto[0]){
-            //aggiorno
-            updateProprietaOggetto(&alienoCattivo[valore_letto.istanza],&valore_letto);
-            //controlllo contatti e agisco di conseguenza
-            if(0<=checkContacts(&alienoCattivo[valore_letto.istanza],proiettile,NUMERO_MAX_PROIETTILI)){
-                if (alienoCattivo[valore_letto.istanza].vite<=0)
-                {
-                    numeroNemici = numeroNemici-1;
-                    printEnemiesLeft(10, 0, numeroNemici);
-                }                
-            }
-            //controllo spari e agisco
-            if (valore_letto.flag==BLANK_SPACE)
-            {                   
-                killIt(&dropBomb[istanzaDropBomb]);
-                setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,valore_letto.x,valore_letto.y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
-                //myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
-                aliveProcesses++;
-                istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
-            }
-            //stampo
-            attron(COLOR_PAIR(1));
-            if (alienoCattivo[valore_letto.istanza].vite>1){                     
-                attron(A_BOLD);
-            }
-            printPropietaOggetto(&alienoCattivo[valore_letto.istanza]);
-        }
-        
-        /*
-            gestisco il caso del proiettile
-         
-        else if (SEGNAPOSTO_PROIETTILE[0]==valore_letto.segnaposto[0]){
-           //printProprietaOggettoDebugLog(DEBUGGING,&proiettile[valore_letto.istanza]);
-            //aggiorno
-            if (isOutOfBound(&proiettile[valore_letto.istanza])){
-                killIt(&proiettile[valore_letto.istanza]);
-            }else/* if (proiettile[valore_letto.istanza].pid!=0){
-                updateProprietaOggetto(&proiettile[valore_letto.istanza],&valore_letto);
-
-                //controllo contatti e agisco di conseguenza
-                index = checkContacts(&proiettile[valore_letto.istanza],alienoCattivo,NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI);
-                if (0<=index){
-                    if (alienoCattivo[index].vite<=0)
-                    {
-                        numeroNemici = numeroNemici-1;
-                        printEnemiesLeft(10, 0, numeroNemici);
-                    }  
-                }
-                //controllo contatti e agisco di conseguenza
-                index = checkContacts(&proiettile[valore_letto.istanza],alieno,NUMERO_ALIENI);
-                if(0<=index){
-                    controlloAlieno(&alieno[index], alienoCattivo);
-                }
-                //stampo
-                // attron(COLOR_PAIR(2));
-                // printPropietaOggetto(&proiettile[valore_letto.istanza]);
-            }
-        }
-        
-        /*
-            gestisco il caso della bomba
-         
-        else if(SEGNAPOSTO_DROPBOMB[0]==valore_letto.segnaposto[0]){
-            //aggiorno
-            if (isOutOfBound(&dropBomb[valore_letto.istanza])){
-                killIt(&dropBomb[valore_letto.istanza]);
-            }//else if (dropBomb[valore_letto.istanza].pid!=0){            
-                updateProprietaOggetto(&dropBomb[valore_letto.istanza],&valore_letto);
-                //controllo contatti e agisco di conseguenza
-                index = checkContacts(&dropBomb[valore_letto.istanza],naveSpaziale,NUMERO_GIOCATORI);
-                if(0<=index){
-                    controlloNave(&viteTotali);
-                    printStringIntDebugLog(DEBUGGING,"nave controllata drop %d\n",&valore_letto.istanza);
-                }
-                //stampo
-                // attron(COLOR_PAIR(3));
-                // printPropietaOggetto(&dropBomb[valore_letto.istanza]);
-            //}
-        }
         
         /*
             gestisco il caso di un errore
@@ -332,10 +194,9 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
             printStringIntDebugLog(DEBUGGING,"qualcosa è andato storto dentro a controllo %d\n",&debugIndex);
             printProprietaOggettoDebugLog(DEBUGGING,&valore_letto);
         }
-        mutexUnlock(&valore_letto.mutex, valore_letto.segnaposto);
-        printNAliveProcesses(getXfieldSize()-15,0,&aliveProcesses);
-        refresh();
-    } while (viteTotali >0 && valore_letto.flag!=QUIT && /*numeroNemici>0 &&*/ valore_letto.flag!=LOST); // ciclo fino al verificarsi di una collisione alieni/naveSpaziale //
+        
+        
+    } while (viteTotali >0 && valore_letto.flag!=QUIT && numeroNemici>0 && valore_letto.flag!=LOST); // ciclo fino al verificarsi di una collisione alieni/naveSpaziale //
 
     killThemAll(alieno, NUMERO_ALIENI);
     killThemAll(naveSpaziale, NUMERO_GIOCATORI);
@@ -373,7 +234,7 @@ void controlloAlieno( struct proprietaOggetto *alieno, struct proprietaOggetto a
     //if(alieno->tid==0){
         //numeroNemici = numeroNemici-1;
         inizializzaPersonaggi(alieno,&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI],NUMERO_ALIENI_CATTIVI);
-        aliveProcesses+= NUMERO_ALIENI_CATTIVI ;
+        //aliveProcesses+= NUMERO_ALIENI_CATTIVI ;
         for ( i = 0; i < NUMERO_ALIENI_CATTIVI; i++)
         {   
             alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI+i].istanza=alieno->istanza*NUMERO_ALIENI_CATTIVI+i;
@@ -387,7 +248,7 @@ void controlloAlieno( struct proprietaOggetto *alieno, struct proprietaOggetto a
             myThreadCreate(&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI+i],alienoF);
             //printProprietaOggettoDebugLog(DEBUGGING,&alienoCattivo[alieno->istanza*NUMERO_ALIENI_CATTIVI+i]);
 
-            numeroNemici = numeroNemici+1;
+            numeroNemici++;
         }  
         //printEnemiesLeft(10, 0, numeroNemici);
     //}
@@ -395,6 +256,10 @@ void controlloAlieno( struct proprietaOggetto *alieno, struct proprietaOggetto a
 
 
 int push(struct proprietaOggetto coda[],struct proprietaOggetto *oggetto){
+    char str[20];
+    strcpy(str,"scrittura ");
+    strcat(str, oggetto->segnaposto);
+    mutexLock(&lock, str);
     if(numeroElementiAttualiCoda>=LUNGHEZZA_CODA){
         return 0;
     }else{
@@ -402,13 +267,20 @@ int push(struct proprietaOggetto coda[],struct proprietaOggetto *oggetto){
         posizioneCoda=(posizioneCoda+1)%LUNGHEZZA_CODA;
         numeroElementiAttualiCoda++;
     }
+    mutexUnlock(&lock,str);
     return 1;
 }
 
 struct proprietaOggetto pop(struct proprietaOggetto coda[]){
     if(numeroElementiAttualiCoda>0){
+        char str[20];
+        mutexLock(&lock,"lettura");
         numeroElementiAttualiCoda--;
-        return coda[(posizioneCoda+(LUNGHEZZA_CODA-numeroElementiAttualiCoda-1))%LUNGHEZZA_CODA];
+        struct proprietaOggetto tmp = coda[(posizioneCoda+(LUNGHEZZA_CODA-numeroElementiAttualiCoda-1))%LUNGHEZZA_CODA];
+        strcpy(str,"lettura ");
+        strcat(str, tmp.segnaposto);
+        mutexUnlock(&lock,str);
+        return tmp;
     }
     struct proprietaOggetto vuoto ;
     vuoto.flag='v';

@@ -1,4 +1,5 @@
 #include "header.h"
+long mutexIndex;
 
 /*
 verifica l'effettivo funzionamento della pipe
@@ -10,39 +11,32 @@ void pipeCeck(int *p){
     }
 }
 
-// void mutexCeck(pthread_mutex_t *m){
-//     if(pthread_mutex_init(m, NULL) != 0) {
-//         perror("mutex creation");
-//         _exit(1);
-//     }
-// }
+
 
 void mutexLock(pthread_mutex_t *m, char nomeMutex[]){
-    // char statoMutex[] = "waiting";
-    // if(pthread_mutex_trylock(m)==0){
-    //     return;
-    // }else{
-    //     printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, statoMutex);
-        
-    //     pthread_mutex_timedlock(m,&deltatime);
-    // }
+    
+    /*if(pthread_mutex_trylock(m)==0){
+        printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, "locked");
+        return;
+    }else{
+        printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, "waiting");        
+        pthread_mutex_lock(m);
+        printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, "locked");
+        //printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, "skipped");    
+    }*/
     pthread_mutex_lock(m);
 }
 void mutexUnlock(pthread_mutex_t *m, char nomeMutex[]){
-    //char statoMutex[] = "False";
-    //printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, statoMutex);
+    //printMutexDebugLog(DEBUGGING_MUTEX, nomeMutex, "UNLOCKED");
     pthread_mutex_unlock(m);
 }
 
 void scrivi (struct proprietaOggetto *personaggio){
     //printStringCharDebugLog(DEBUGGING,"%c: ",&personaggio->segnaposto[0]);
     //printStringIntDebugLog(DEBUGGING, "%d, sta provando a scrivere\n",&personaggio->istanza);
-        char str[20];
-        strcpy(str,"scrittura ");
-        strcat(str, personaggio->segnaposto);
-        mutexLock(&lock, str);
+        
         push(codaProprieta,personaggio);
-        mutexUnlock(&lock,"scrittura");
+        
     
     //printStringIntDebugLog(DEBUGGING, "%d, ha scritto\n",&personaggio->istanza);
 }
@@ -72,6 +66,8 @@ pthread_t myThreadCreate(struct proprietaOggetto* personaggio, void* (*figlio) (
     fflush(NULL);
 
     pthread_create(&personaggio->tid,NULL,figlio,personaggio);
+    aliveProcesses++;
+    printNAliveProcesses(getXfieldSize()-15,0,&aliveProcesses);
     printStringIntDebugLog(DEBUGGING, "%d, tread creato\n",&personaggio->istanza);
     fflush(NULL);
     return personaggio->tid;
@@ -113,7 +109,8 @@ void killThemAll(struct proprietaOggetto personaggio[], int numeroPersonaggi){
     printStringCharDebugLog(DEBUGGING," kill Them All! %c \n", &personaggio[0].segnaposto[0]);
     for (i=0; i<numeroPersonaggi; i++)
     {
-        killIt(&personaggio[i]);       
+        killIt(&personaggio[i]);
+        pthread_join(personaggio[i].tid,NULL);      
     }
 }
 
@@ -129,18 +126,22 @@ void killIt(struct proprietaOggetto *personaggio){
 
     if (personaggio->tid!=0){
         personaggio->isAlive=false;
-        deletePropietaOggetto(personaggio);
+        mutexLock(&printMutex,"cancello perche morto");
+        deletePropietaOggetto(personaggio);        
         //kill(personaggio->pid,1);
-        printStringIntDebugLog(DEBUGGING,"killit in esecuzione %d\n",&debugIndex);
+        printStringIntDebugLog(DEBUGGING2,"killit in esecuzione %d\n",&debugIndex);
         //fflush(NULL);
         
-        
         printStringIntDebugLog(DEBUGGING_NEEDED,"killit eseguita %d\n",&debugIndex);
-        pthread_join(personaggio->tid,NULL);
+        //pthread_join(personaggio->tid,NULL);
+        
         personaggio->tid = 0;  
-        deletePropietaOggetto(personaggio); 
+        deletePropietaOggetto(personaggio);
+        mutexUnlock(&printMutex,"cancello perche morto");
+        scrivi(personaggio); 
         aliveProcesses--;
-    }  
+    } 
+    printNAliveProcesses(getXfieldSize()-15,0,&aliveProcesses); 
 }
 
 

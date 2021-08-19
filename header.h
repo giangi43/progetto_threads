@@ -24,8 +24,8 @@
 #define SEGNAPOSTO_PROIETTILE "*"
 #define SEGNAPOSTO_DROPBOMB "o"
 #define LUNGHEZZA_SEGNAPOSTO 7
-#define D_NUMERO_ALIENI 1
-#define D_NUMERO_ALIENI_CATTIVI 0
+#define D_NUMERO_ALIENI 8
+#define D_NUMERO_ALIENI_CATTIVI 5
 #define D_NUMERO_GIOCATORI 1
 #define D_NUMERO_MAX_PROIETTILI 20
 #define D_VITE_NAVE 6
@@ -54,9 +54,9 @@
 #define MAX_STRING_SIZE 20
 #define MAXPRINTABLEOBJECTSTRINGS 3
 
-#define DEBUGGING_NEEDED true
-#define DEBUGGING_MUTEX true
-#define DEBUGGING true
+#define DEBUGGING_NEEDED false
+#define DEBUGGING_MUTEX false
+#define DEBUGGING false
 #define DEBUGGING2 false  //abilita la funzione di debugging/logging su file
 
 // Struttura per la comunicazione tra figli e padre //
@@ -109,8 +109,9 @@ int IS_WITH_THREAD;
 
 int aliveProcesses;
 pthread_mutex_t lock;
-pthread_mutex_t debug;///////////
-pthread_mutex_t lifes;
+//pthread_mutex_t debug;///////////
+//pthread_mutex_t lifes;
+pthread_mutex_t printMutex;
 
 struct proprietaOggetto codaProprieta[LUNGHEZZA_CODA];
 int posizioneCoda;
@@ -162,10 +163,6 @@ void scrivi (struct proprietaOggetto *personaggio);
 void leggi ( struct proprietaOggetto *valore_letto);
 pid_t myForkSwitch(struct proprietaOggetto *personaggio, int *fileDescriptor, void* (*figlio) (void*));
 pthread_t myThreadCreate(struct proprietaOggetto *personaggio, void* (*figlio) (void*));
-void forkSwitch(pid_t *pid, int *fileDescriptor, void (*padre) (int), void (*figlio) (int)); // esegue una fork
-void forkSwitch3Way(pid_t *pid_figlio1, pid_t *pid_figlio2, int *fileDescriptor, void (*padre) (int), void (*figlio1) (int), void (*figlio2) (int)); // esegue una fork con 2 figli
-void nephewForkSwitch(pid_t *pid, int fileDescriptor, int instance, void (*nephew) (int,int));
-void nNephewGenerator(pid_t pid[], int fileDescriptor, int nOfNephews, int startingInstance, void (*nephew) (int,int));
 void freeTheBuffer(int pipein,struct proprietaOggetto valore_letto); // ripulisce tutto il buffer
 void killThemAll(struct proprietaOggetto personaggio[], int numeroPersonaggi);
 void killIt(struct proprietaOggetto *personaggio);
