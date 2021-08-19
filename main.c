@@ -21,7 +21,7 @@ int main(){
     PASSI_IN_VERTICALE = D_PASSI_IN_VERTICALE;
     VELOCITA_PROIETTILI = D_VELOCITA_PROIETTILI;
     VELOCITA_PERSONAGGI = D_VELOCITA_PERSONAGGI;
-    IS_WITH_THREAD = THREAD_ON;
+    IS_AUTONOMUS = D_IS_AUTONOMUS;
 
     struct proprietaOggetto talieno[NUMERO_ALIENI];
     struct proprietaOggetto talienoCattivo[NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI];
@@ -46,7 +46,7 @@ int main(){
                             "passi in verticale",
                             "velocita proiettili",
                             "velocita personaggi",
-                            "usa thread"};
+                            "si gioca da solo"};
     int* interazioni[] ={   &NUMERO_ALIENI,
                             &NUMERO_ALIENI_CATTIVI,
                             &NUMERO_MAX_PROIETTILI,
@@ -56,7 +56,7 @@ int main(){
                             &PASSI_IN_VERTICALE,
                             &VELOCITA_PROIETTILI,
                             &VELOCITA_PERSONAGGI,
-                            &IS_WITH_THREAD};
+                            &IS_AUTONOMUS};
 
     //printf("%d",*interazioni[0]);
     srand((int)((int)time(0)^(1/5)));
@@ -207,7 +207,7 @@ printStringIntDebugLog(DEBUGGING,"entrato dentro controllo() %d; ", &debugIndex)
 
     printStringIntDebugLog(DEBUGGING2," uscente da killThemAll %d\n", &debugIndex);
     /**/
-    
+    mutexLock(&printMutex,"stampo animazioni");
     if (naveSpaziale[0].vite<1 || valore_letto.flag==LOST){
         gameOver(getXfieldSize(), getYfieldSize());
     }

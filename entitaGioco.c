@@ -78,9 +78,12 @@ char spostamentoAPassiLaterali (struct proprietaOggetto *personaggio, bool isRan
     char c = 'n';
     if (isRandom){
         napms(VELOCITA_PERSONAGGI);
-        c = customRandom(DESTRA, SINISTRA);        
-        passo(personaggio,c);
-        if (customRandom(0,5)==0){
+        c = customRandom(DESTRA, SINISTRA); 
+        if((c==DESTRA && personaggio->x < getXfieldSize()-personaggio->lunghezzaSegnaposto-1) || (c==SINISTRA && personaggio->x > 1) ){
+            passo(personaggio,c);
+        }       
+        
+        if (customRandom(0,2)==0){
             personaggio->flag=BLANK_SPACE;
         }
     }
@@ -272,13 +275,13 @@ char spostamentoDropBomb (struct proprietaOggetto *proiettile){
 }
 
 
-void spara(struct proprietaOggetto proiettile[], struct proprietaOggetto *valore_letto, int fileDescriptor[],int istanzaProiettile){
+void spara(struct proprietaOggetto proiettile[], struct proprietaOggetto *valore_letto){
     
     killIt(&proiettile[istanzaProiettile]);
     killIt(&proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI]);
 
-    setPersonaggio(&proiettile[istanzaProiettile],SEGNAPOSTO_PROIETTILE,valore_letto->x+valore_letto->lunghezzaSegnaposto/2-1,valore_letto->y-1,0,proiettile[istanzaProiettile].vite,istanzaProiettile);                    
-    setPersonaggio(&proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI],SEGNAPOSTO_PROIETTILE,valore_letto->x+valore_letto->lunghezzaSegnaposto/2-1,valore_letto->y-1,0,proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI].vite,(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI);                    
+    setPersonaggio(&proiettile[istanzaProiettile],SEGNAPOSTO_PROIETTILE,valore_letto->x+valore_letto->lunghezzaSegnaposto/2-1,valore_letto->y-1,0,1,istanzaProiettile);                    
+    setPersonaggio(&proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI],SEGNAPOSTO_PROIETTILE,valore_letto->x+valore_letto->lunghezzaSegnaposto/2-1,valore_letto->y-1,0,1,(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI);                    
 
     myThreadCreate(&(proiettile[istanzaProiettile]),proiettileSX);
     myThreadCreate(&(proiettile[(istanzaProiettile+1)%NUMERO_MAX_PROIETTILI]),proiettileDX);
@@ -322,10 +325,16 @@ void *proiettileSX(void* voidPersonaggio){
             killIt(personaggio);
             break;
         }
-        
+
+        if (personaggio->vite<=0){            
+            killIt(personaggio);
+            break;
+        }
+
         //aggiorno
         if (isOutOfBound(personaggio)){
             killIt(personaggio);
+            break;
         }else{
 
             //controllo contatti e agisco di conseguenza
@@ -334,9 +343,10 @@ void *proiettileSX(void* voidPersonaggio){
             //controllo contatti e agisco di conseguenza
             index = checkContacts(personaggio,alieno,NUMERO_ALIENI);
             if(0<=index){
-                controlloAlieno(&alieno[index], alienoCattivo);
+                if (alieno[index].vite<=0){
+                    controlloAlieno(&alieno[index], alienoCattivo);
+                }
             }
-
 
             printPropietaOggetto(personaggio,personaggio->vite,apparenzaProiettile);
         }
@@ -379,10 +389,16 @@ void *proiettileDX(void* voidPersonaggio){
             break;
         }
         
+        if (personaggio->vite<=0){            
+            killIt(personaggio);
+            break;
+        }
+
         //aggiorno
         if (isOutOfBound(personaggio)){
             killIt(personaggio);
-        }else/* if (proiettile[valore_letto.istanza].pid!=0)*/{
+            break;
+        }else{
 
             //controllo contatti e agisco di conseguenza
             index = checkContacts(personaggio,alienoCattivo,NUMERO_ALIENI*NUMERO_ALIENI_CATTIVI);
@@ -390,20 +406,11 @@ void *proiettileDX(void* voidPersonaggio){
             //controllo contatti e agisco di conseguenza
             index = checkContacts(personaggio,alieno,NUMERO_ALIENI);
             if(0<=index){
-                controlloAlieno(&alieno[index], alienoCattivo);
+                if (alieno[index].vite<=0){
+                    controlloAlieno(&alieno[index], alienoCattivo);
+                }
             }
-            //mutexLock(&lifes,"vite");
-        if (personaggio->vite<=0){
-            //mutexUnlock(&lifes,"vite");
-            scrivi(personaggio);
-            mutexLock(&printMutex,"cancello perche morto");
-            deletePropietaOggetto(personaggio);
-            mutexUnlock(&printMutex,"cancello perche morto");
-            break;
-        }
-        
-        //mutexUnlock(&lifes,"vite");
-
+            
             printPropietaOggetto(personaggio,personaggio->vite,apparenzaProiettile);
         }
     }
@@ -444,21 +451,11 @@ void *dropBombF(void* voidPersonaggio){
             break;
         }
         
-        //mutexLock(&lifes,"vite");
         if (personaggio->vite<=0){
-            //mutexUnlock(&lifes,"vite");
-            scrivi(personaggio);
-            mutexLock(&printMutex,"cancello perche morto");
             killIt(personaggio);
-            mutexUnlock(&printMutex,"cancello perche morto");
             break;
         }
-        //mutexUnlock(&lifes,"vite");
-
-        //scrivi(personaggio);
-        //stampo
-        //attron(COLOR_PAIR(2));
-        //else if (dropBomb[valore_letto.istanza].pid!=0){            
+          
                 //controllo contatti e agisco di conseguenza
         index = checkContacts(personaggio,naveSpaziale,NUMERO_GIOCATORI);
         if(0<=index){
@@ -469,12 +466,7 @@ void *dropBombF(void* voidPersonaggio){
         if (isOutOfBound(personaggio)){
                 killIt(personaggio);
                 break;
-        }
-
-                //stampo
-                // attron(COLOR_PAIR(3));
-                // printPropietaOggetto(&dropBomb[valore_letto.istanza]);
-            //}
+        }       
 
         printPropietaOggetto(personaggio,personaggio->vite,apparenzaDropBomb);
     }
@@ -554,7 +546,7 @@ void *alienoF(void* voidPersonaggio){
         if (personaggio->flag==BLANK_SPACE)
         {                   
             killIt(&dropBomb[istanzaDropBomb]);
-            setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,personaggio->x,personaggio->y+1,0,dropBomb[istanzaDropBomb].vite,istanzaDropBomb);                    
+            setPersonaggio(&dropBomb[istanzaDropBomb],SEGNAPOSTO_DROPBOMB,personaggio->x,personaggio->y+1,0,1,istanzaDropBomb);                    
             myThreadCreate(&(dropBomb[istanzaDropBomb]),dropBombF);
             //aliveProcesses++;
             istanzaDropBomb = (istanzaDropBomb+1)%NUMERO_MAX_PROIETTILI;
@@ -587,14 +579,14 @@ void *naveSpazialeF(void* voidPersonaggio){
     
     //scrivi(personaggio);
     //printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale); 
+    printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale);
 
     while(personaggio->isAlive) {               
         
         numeroGiriCiclo++;
         //printStringIntDebugLog(true,"giro :%d\n",&numeroGiriCiclo);
         napms(VELOCITA_PERSONAGGI/10);
-        printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale);
-        spostamentoAPassiLaterali(personaggio, true);
+        spostamentoAPassiLaterali(personaggio, IS_AUTONOMUS);
         counter++;
         if(counter==100){
             counter=0;
@@ -612,34 +604,30 @@ void *naveSpazialeF(void* voidPersonaggio){
            break;          
         }
 
+        //controllo spari e agisco
+        if (personaggio->flag==BLANK_SPACE)
+        {
+            spara(proiettile, personaggio);                               
+        } 
+
         if (personaggio->flag==QUIT){
             scrivi(personaggio);
             break;
         }
-        
-        //mutexLock(&lifes,"vite");
-        if (personaggio->vite<=0){
-            //mutexUnlock(&lifes,"vite");
-            personaggio->flag=LOST;
-            scrivi(personaggio);
-            break;
-        }       
+                       
 
         //controlllo contatti e agisco di conseguenza
         if(0<=checkContacts(personaggio,dropBomb,NUMERO_MAX_PROIETTILI)){
             printLifesLeft(1,0,personaggio->vite);
-            printStringIntDebugLog(DEBUGGING,"nave controllata nave %d\n",&personaggio->istanza);
-
         }
-        //mutexUnlock(&lifes,"vite");
-
-        //controllo spari e agisco
-        if (personaggio->flag==BLANK_SPACE)
-        {
-            spara(proiettile, personaggio,NULL,istanzaProiettile);                               
-        }               
+        
         
         //stampo
         printPropietaOggetto(personaggio,personaggio->vite,apparenzaNaveSpaziale); 
+        if (personaggio->vite<=0){
+            personaggio->flag=LOST;
+            scrivi(personaggio);
+            break;
+        }
     }
 }

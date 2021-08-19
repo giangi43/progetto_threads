@@ -16,8 +16,8 @@
 
 //#define printStringDebugLog(isDebugging,string,something) _Generic((isDebugging,string,something), int*: printStringIntDebugLog, char*: printStringCharDebugLog)(isDebugging,string,something);
 
-#define THREAD_ON true
-#define LUNGHEZZA_CODA 4000
+#define D_IS_AUTONOMUS true
+#define LUNGHEZZA_CODA 40
 #define SEGNAPOSTO_ALIENO "<(^_^)>"
 #define SEGNAPOSTO_ALIENO_CATTIVO ">.<"
 #define SEGNAPOSTO_NAVE "7:^)" //"\\(°^°)/"
@@ -105,7 +105,7 @@ int VITE_ALIENI_CATTIVI;
 int PASSI_IN_VERTICALE ;
 int VELOCITA_PROIETTILI;
 int VELOCITA_PERSONAGGI;
-int IS_WITH_THREAD;
+int IS_AUTONOMUS;
 
 int aliveProcesses;
 pthread_mutex_t lock;
@@ -141,7 +141,7 @@ void controllo ();
 void *alienoF(void* voidComm);
 //void naveSpazialeF(int pipeout, struct proprietaOggetto *personaggio);
 void *naveSpazialeF(void* voidComm);
-void spara(struct proprietaOggetto proiettile[], struct proprietaOggetto *valore_letto, int fileDescriptor[],int istanzaProiettile);
+void spara(struct proprietaOggetto proiettile[], struct proprietaOggetto *valore_letto);
 void *proiettileSX(void* voidComm);
 void *proiettileDX(void* voidComm);
 void *dropBombF(void* voidComm);
